@@ -18,24 +18,60 @@ const dbPath = path.join(dbDir, "db.sqlite");
 // 建立連線
 const db = new Database(dbPath);
 
+// 設定 WAL 模式，如果尚未設定
+const journalMode = db.pragma('journal_mode', { simple: true });
+if (journalMode !== 'wal') {
+  db.pragma('journal_mode = WAL');
+}
+
 // 建立資料表（如果不存在）
 db.prepare(`
-  CREATE TABLE IF NOT EXISTS lunch_options (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL
-  )
+  CREATE TABLE IF NOT EXISTS meal_options (
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    name         TEXT    NOT NULL,
+    weight       INTEGER NOT NULL DEFAULT 1,
+    tags         TEXT    DEFAULT NULL,
+    description  TEXT    DEFAULT NULL,
+    metadata     TEXT    DEFAULT NULL,
+    created_at   TEXT    NOT NULL DEFAULT (datetime())
+  );
 `).run();
 
 function getLunchOptions() {
-  return db.prepare("SELECT * FROM lunch_options").all();
+  return db.prepare("SELECT * FROM meal_options").all();
 }
 
-function addLunchOption(name: string) {
-  return db.prepare("INSERT INTO lunch_options (name) VALUES (?)").run(name);
+function addLunchOption(option: {
+  name: string;
+  weight?: number;
+  tags?: string;
+  description?: string;
+  metadata?: string;
+}) {
+  return db.prepare(`
+    INSERT INTO meal_options (name, weight, tags, description, metadata)
+    VALUES (@name, @weight, @tags, @description, @metadata)
+  `).run({
+    name: option.name,
+    weight: option.weight ?? 1,
+    tags: option.tags ?? null,
+    description: option.description ?? null,
+    metadata: option.metadata ?? null,
+  });
 }
 
-function getDbPath() {
-  return dbPath;
+function deleteLunchOption(id: number) {
+  return db.prepare(`
+    DELETE FROM meal_options
+    WHERE id = ?
+  `).run(id);
 }
 
-export { addLunchOption, getDbPath, getLunchOptions };
+function pickRestaurant() {
+  // 模擬挑選過程：比如依經濟狀況篩選權重高的餐廳
+  return db.prepare(
+    `SELECT * FROM meal_options ORDER BY RANDOM() * weight DESC`
+  ).all();
+}
+
+export { addLunchOption, getLunchOptions, deleteLunchOption, pickRestaurant };
