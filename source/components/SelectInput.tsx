@@ -1,16 +1,22 @@
 import { Box, Text, useInput } from "ink";
 import React, { useState } from "react";
+import { InsultsKey } from "../types/index.js";
 
 type options = {
   label: string;
-  value: string;
+  value: InsultsKey;
 }
 
 type SelectInputProps = {
   optionItems: options[];
-  onSelect: (item: { label: string; value: string }) => void;
+  onSelect: (item: { label: string; value: InsultsKey }) => void;
 };
 
+/**
+ * 下拉式選單共用元件
+ *
+ * 傳入要顯示的選項 optionItems 跟 選中後的 callback onSelect()
+ */
 const SelectInput = ({ optionItems, onSelect }: SelectInputProps): JSX.Element => {
   // Cursor position
   const [index, setIndex] = useState(0);
