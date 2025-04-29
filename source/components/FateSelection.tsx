@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Text, Box } from "ink";
 import Spinner from "ink-spinner";
 import { pickRestaurant } from "../db.js"; // 你自己的 db 讀取
+import { InsultsKey } from "../types/index.js";
 
-interface FateSelectionProps {
-  walletStatus: string; // 用戶選擇的經濟狀況，例如 "empty", "coins", "savings" 這類
+type FateSelectionProps = {
+  // 用戶選擇的經濟狀況，例如 "empty", "coins", "savings" 這類
+  walletStatus: InsultsKey;
+  comment: string;
 }
 
 const FateSelection = ({ walletStatus }: FateSelectionProps): JSX.Element => {

@@ -14,11 +14,27 @@ const Cover = (): JSX.Element => (
     height="100%"
   >
     <BtopLikeTitle />
-    <Box marginTop={1}>
-      <Text color="gray">"You are alone... Choose wisely."</Text>
+    <Box
+      flexDirection="column"
+    >
+      <Box margin={2}>
+        <Text color="gray">"You are alone... Choose wisely."</Text>
+      </Box>
+      <Box margin={1}>
+        <Text color="cyan">[Enter]</Text>
+        <Text> 吃什麼？隨便、都可以 🤷‍♂️</Text>
+      </Box>
+      <Box margin={1}>
+        <Text color="green">[M]</Text>
+        <Text> 想要有新菜單？進去試試看吧 🤙</Text>
+      </Box>
+      <Box margin={1}>
+        <Text color="red">[Q]</Text>
+        <Text> 落荒而逃，只能吃土去了 ☠️</Text>
+      </Box>
     </Box>
-    <Box marginTop={2}>
-      <BlinkingText>請按任意鍵開始或輸入 q 離開...</BlinkingText>
+    <Box marginTop={3}>
+      <BlinkingText>請選擇一個項目️️</BlinkingText>
     </Box>
   </Box>
 );

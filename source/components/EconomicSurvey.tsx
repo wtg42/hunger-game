@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Text, useApp, useInput } from "ink";
 import SelectInput from "./SelectInput.js";
 import { InsultsKey } from "../types/index.js";
+import FateSelection from "./FateSelection.js";
 
 const optionItems: { label: string; value: InsultsKey }[] = [
   { label: "💸 錢包空空如也", value: "empty" },
@@ -25,7 +26,12 @@ const insults: Record<InsultsKey, string> = {
  */
 const EconomicSurvey = (): JSX.Element => {
   const { exit } = useApp();
+
+  // 要給我用互看的訊息
   const [selectedMessage, setSelectedMessage] = useState<string | null>(null);
+
+  // 用戶選擇的經濟狀況
+  const [userWalletStatus, setUserWalletStatus] = useState<InsultsKey>('empty');
 
   useInput((input, _) => {
     if (input === "q") {
@@ -41,20 +47,23 @@ const EconomicSurvey = (): JSX.Element => {
   const handleOnselect = (
     { label, value }: { label: string; value: InsultsKey },
   ) => {
-    const responseUserSelect = `
-    ${label}
-    ${insults[value]}`;
-    setSelectedMessage(responseUserSelect);
+    setUserWalletStatus(value)
+    setSelectedMessage(label + insults[value]);
   };
 
   // 用戶選擇經濟狀況後的顯示的訊息
   if (selectedMessage) {
-    return <Text>{selectedMessage}</Text>;
+    return (
+      <FateSelection
+        comment={selectedMessage}
+        walletStatus={userWalletStatus}
+      />
+    )
   }
 
   return (
     <>
-      <Text>你的錢包君健康狀態是...</Text>
+      <Text>首先我們來看看你的錢包君健康狀態是...</Text>
       <SelectInput
         optionItems={optionItems}
         onSelect={handleOnselect}
