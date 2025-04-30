@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-import React from 'react';
-import { render } from 'ink';
+import React from "react";
+import { render } from "ink";
 // import meow from 'meow';
-import App from './app.js';
+import App from "./app.js";
 
 // 暫時屏蔽 目前還沒有使用到 flags
 // const cli = meow(
@@ -33,5 +33,5 @@ const { waitUntilExit } = render(<App />);
 try {
   await waitUntilExit();
 } catch (error) {
-  console.log("An error occurred as the app was exiting.", error)
+  console.log("An error occurred as the app was exiting.", error);
 }

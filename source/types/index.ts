@@ -3,4 +3,4 @@
  */
 
 // 經濟狀況調查功能用的類型
-export type InsultsKey = 'empty' | 'coins' |'savings' | 'stable' | 'rich';
+export type InsultsKey = "empty" | "coins" | "savings" | "stable" | "rich";

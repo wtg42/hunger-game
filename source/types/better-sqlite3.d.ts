@@ -1,5 +1,5 @@
 // 官方沒有出定義檔，用這個暫時擋著用。
-declare module 'better-sqlite3' {
+declare module "better-sqlite3" {
   interface DatabaseOptions {
     memory?: boolean;
     readonly?: boolean;

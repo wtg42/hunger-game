@@ -19,9 +19,9 @@ const dbPath = path.join(dbDir, "db.sqlite");
 const db = new Database(dbPath);
 
 // 設定 WAL 模式，如果尚未設定
-const journalMode = db.pragma('journal_mode', { simple: true });
-if (journalMode !== 'wal') {
-  db.pragma('journal_mode = WAL');
+const journalMode = db.pragma("journal_mode", { simple: true });
+if (journalMode !== "wal") {
+  db.pragma("journal_mode = WAL");
 }
 
 // 建立資料表（如果不存在）
@@ -70,8 +70,8 @@ function deleteLunchOption(id: number) {
 function pickRestaurant() {
   // 模擬挑選過程：比如依經濟狀況篩選權重高的餐廳
   return db.prepare(
-    `SELECT * FROM meal_options ORDER BY RANDOM() * weight DESC`
+    `SELECT * FROM meal_options ORDER BY RANDOM() * weight DESC`,
   ).all();
 }
 
-export { addLunchOption, getLunchOptions, deleteLunchOption, pickRestaurant };
+export { addLunchOption, deleteLunchOption, getLunchOptions, pickRestaurant };

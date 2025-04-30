@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { useInput, useApp } from "ink";
+import { useApp, useInput } from "ink";
 import Cover from "./components/Cover.js";
 import EconomicSurvey from "./components/EconomicSurvey.js";
 
+type NextSetp = "return" | "m" | "";
+
 export default function App(): JSX.Element {
   // 判斷用戶按下任意鍵轉換場景
-  const [nextStep, setNextStep] = useState(false);
+  const [nextStep, setNextStep] = useState<NextSetp>("");
 
   const { exit } = useApp();
 
@@ -13,20 +15,25 @@ export default function App(): JSX.Element {
     if (input === "q") {
       exit();
     } else if (key.return) {
-      setNextStep(true);
+      setNextStep("return");
     } else if (input === "m") {
       // 進入餐廳編輯畫面
+      setNextStep("m");
     }
   }, {
     isActive: !nextStep,
   });
 
-  if (nextStep) {
+  if (nextStep === "return") {
     return (
       <>
         <EconomicSurvey />
       </>
     );
+  }
+
+  if (nextStep === "m") {
+    //
   }
 
   return (

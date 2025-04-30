@@ -31,7 +31,7 @@ const EconomicSurvey = (): JSX.Element => {
   const [selectedMessage, setSelectedMessage] = useState<string | null>(null);
 
   // 用戶選擇的經濟狀況
-  const [userWalletStatus, setUserWalletStatus] = useState<InsultsKey>('empty');
+  const [userWalletStatus, setUserWalletStatus] = useState<InsultsKey>("empty");
 
   useInput((input, _) => {
     if (input === "q") {
@@ -47,7 +47,7 @@ const EconomicSurvey = (): JSX.Element => {
   const handleOnselect = (
     { label, value }: { label: string; value: InsultsKey },
   ) => {
-    setUserWalletStatus(value)
+    setUserWalletStatus(value);
     setSelectedMessage(label + insults[value]);
   };
 
@@ -58,7 +58,7 @@ const EconomicSurvey = (): JSX.Element => {
         comment={selectedMessage}
         walletStatus={userWalletStatus}
       />
-    )
+    );
   }
 
   return (

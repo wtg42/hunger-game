@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, Box } from "ink";
+import { Box, Text } from "ink";
 import Spinner from "ink-spinner";
 import { pickRestaurant } from "../db.js"; // 你自己的 db 讀取
 import { InsultsKey } from "../types/index.js";
@@ -8,7 +8,7 @@ type FateSelectionProps = {
   // 用戶選擇的經濟狀況，例如 "empty", "coins", "savings" 這類
   walletStatus: InsultsKey;
   comment: string;
-}
+};
 
 const FateSelection = ({ walletStatus }: FateSelectionProps): JSX.Element => {
   const [loading, setLoading] = useState(true);
@@ -27,7 +27,9 @@ const FateSelection = ({ walletStatus }: FateSelectionProps): JSX.Element => {
   if (loading) {
     return (
       <Box flexDirection="column" alignItems="center">
-        <Text color="cyan"><Spinner type="dots" /> 正在召喚命運的餐廳...</Text>
+        <Text color="cyan">
+          <Spinner type="dots" /> 正在召喚命運的餐廳...
+        </Text>
       </Box>
     );
   }
