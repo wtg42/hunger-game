@@ -15,7 +15,7 @@ const BlinkingText = ({children}: {children: React.ReactNode}): JSX.Element => {
   useEffect(() => {
     const interval = setInterval(() => {
       setVisible((visible) => !visible);
-    }, 500);
+    }, 1000);
     return () => clearInterval(interval);
   }, []);
 

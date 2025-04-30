@@ -34,7 +34,7 @@ const Cover = (): JSX.Element => (
       </Box>
     </Box>
     <Box marginTop={3}>
-      <BlinkingText>請選擇一個項目️️</BlinkingText>
+      <BlinkingText>請選擇一個項目</BlinkingText>
     </Box>
   </Box>
 );
