@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Text, useApp, useInput } from "ink";
 import SelectInput from "./SelectInput.js";
 import { InsultsKey } from "../types/index.js";
@@ -44,12 +44,13 @@ const EconomicSurvey = (): JSX.Element => {
   /**
    * 依照選中選項顯示回應，並且記錄起來
    */
-  const handleOnselect = (
-    { label, value }: { label: string; value: InsultsKey },
-  ) => {
-    setUserWalletStatus(value);
-    setSelectedMessage(label + insults[value]);
-  };
+  const handleOnselect = useCallback(
+    ({ label, value }: { label: string; value: InsultsKey }) => {
+      setUserWalletStatus(value);
+      setSelectedMessage(label + insults[value]);
+    },
+    [],
+  );
 
   // 用戶選擇經濟狀況後的顯示的訊息
   if (selectedMessage) {

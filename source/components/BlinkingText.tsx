@@ -11,7 +11,7 @@ const BlinkingText = (
   { children }: { children: React.ReactNode },
 ): JSX.Element => {
   // 顯示或隱藏文字
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
 
   // 在掛載時候 設定定時器閃爍
   useEffect(() => {
@@ -21,7 +21,8 @@ const BlinkingText = (
     return () => clearInterval(interval);
   }, []);
 
-  return visible ? <Text>{children}</Text> : <Text></Text>;
+  // You need to leave a space, otherwise the screen will look wired.
+  return visible ? <Text>{children}</Text> : <Text> </Text>;
 };
 
 export default BlinkingText;

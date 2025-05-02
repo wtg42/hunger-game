@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useApp, useInput } from "ink";
 import Cover from "./components/Cover.js";
 import EconomicSurvey from "./components/EconomicSurvey.js";
+import MealOptionsManager from "./components/MealOptionsManager.js";
 
 type NextSetp = "return" | "m" | "";
 
@@ -33,7 +34,13 @@ export default function App(): JSX.Element {
   }
 
   if (nextStep === "m") {
-    //
+    // 進入餐廳編輯畫面
+    return (
+      <>
+        <MealOptionsManager />
+      </>
+    )
+
   }
 
   return (
