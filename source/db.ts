@@ -37,13 +37,13 @@ db.prepare(`
   );
 `).run();
 
-function getLunchOptions() {
+function getMealOptions() {
   return db.prepare("SELECT * FROM meal_options").all();
 }
 
-function addLunchOption(option: {
+function addMealOption(option: {
   name: string;
-  weight?: number;
+  weight: number;
   tags?: string;
   description?: string;
   metadata?: string;
@@ -60,7 +60,7 @@ function addLunchOption(option: {
   });
 }
 
-function deleteLunchOption(id: number) {
+function deleteMealOption(id: number) {
   return db.prepare(`
     DELETE FROM meal_options
     WHERE id = ?
@@ -74,4 +74,4 @@ function pickRestaurant() {
   ).all();
 }
 
-export { addLunchOption, deleteLunchOption, getLunchOptions, pickRestaurant };
+export { addMealOption, deleteMealOption, getMealOptions, pickRestaurant };

@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Text, useInput } from "ink";
+import { addMealOption } from "../db.js";
+import App from "../app.js";
 
 // 定義要詢問用戶的問題列表
 const questions = [
@@ -27,15 +29,14 @@ const AddMealPage = () => {
   // 判斷是否所有問題都已回答完畢
   const questionDone = step === questions.length;
 
-  React.useEffect(() => {
-    console.log(logs)
-  }, [logs])
+  // 判斷是否已儲存到 DB
+  const [isSaved, setIsSaved] = useState(false);
 
   useInput((input, key) => {
     if (key.return) {
       setStep((prev) => {
         if (prev >= questions.length) {
-          return prev
+          return prev;
         }
         return prev + 1;
       });
@@ -44,15 +45,78 @@ const AddMealPage = () => {
       setLogs((prev) => {
         // 問題已回答完畢只需要顯示已有的回答
         if (questionDone) {
-          return prev
+          return prev;
         }
-        return [...prev, inputStatement]
+        return [...prev, inputStatement];
       });
       setInputStatetment("");
       return;
     }
     setInputStatetment((prev) => prev + input);
   });
+
+  // 問卷內容寫入 DB
+  useEffect(() => {
+    if (!questionDone) {
+      return;
+    }
+
+    let timer: NodeJS.Timeout | undefined = undefined;
+    try {
+      addMealOption({
+        name: logs[0] ?? "",
+        weight: Number(logs[1]),
+        tags: logs[2],
+        description: logs[3],
+        metadata: "", // 之後會有其他頁面功能寫入
+      });
+      // 故意停個三秒讓用戶看自己輸入的列表
+      timer = setTimeout(() => {
+        // You don't need to do anything.
+        setIsSaved(true);
+      }, 3000);
+    } catch (error) {
+      // TODO: Handle errors
+    }
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [questionDone]);
+
+  // 時間到自動切換到首頁
+  const [goHome, setGoHome] = useState(false);
+
+  // 最後在顯示一秒儲存成功訊息 回到首頁
+  useEffect(() => {
+    if (!isSaved) {
+      return;
+    }
+    const timer = setTimeout(() => {
+      setGoHome(true);
+    }, 1000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [isSaved]);
+
+  if (goHome) {
+    return <App />;
+  }
+
+  if (isSaved) {
+    return (
+      <Box
+        flexDirection="column"
+        borderColor="yellow"
+        borderStyle={"round"}
+      >
+        <Text>已儲存</Text>
+      </Box>
+    );
+  }
+
   return (
     <Box flexDirection="column">
       <Box
@@ -70,20 +134,21 @@ const AddMealPage = () => {
         {questionDone && logs.length > 0 && (
           logs.map((item: string, index: number) => (
             <Text key={`${index}-${item}`}>
-              {`${questions[index]}: ${item.slice(0, 1)}`}
-              {/* {`${questions[index]}: `} */}
+              {`${questions[index]}: ${item}`}
             </Text>
           ))
         )}
       </Box>
-      <Box
-        flexDirection="column"
-        margin={1}
-        borderColor="green"
-        borderStyle={"round"}
-      >
-        <Text color="cyan">{inputStatement || " "}</Text>
-      </Box>
+      {!questionDone && (
+          <Box
+            flexDirection="column"
+            margin={1}
+            borderColor="green"
+            borderStyle={"round"}
+          >
+            <Text color="cyan">{inputStatement || " "}</Text>
+          </Box>
+      )}
     </Box>
   );
 };
