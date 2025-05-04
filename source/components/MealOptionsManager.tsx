@@ -3,6 +3,7 @@ import { useInput } from "ink";
 import App from "../app.js";
 import SelectInput from "./SelectInput.js";
 import Notification from "./Notification.js";
+import AddMealPage from "./AddMealPage.js";
 
 const mealOptions: { label: string; value: string }[] = [
   { label: "新增餐點", value: "add" },
@@ -25,19 +26,27 @@ const MealOptionsManager = () => {
    */
   const handleOnSelect = useCallback(
     (item: { label: string; value: string }) => {
-      console.log(item);
+      setUserSelected(item.value);
     },
     [],
   );
 
+  const [inputActive, setInputActive] = useState(true);
+
   useInput((input, key) => {
     if (key.escape) {
       setUserSelected("escape");
+      return;
     }
 
     if (input == "q") {
       setUserSelected("q");
+      return;
     }
+
+    setInputActive(false);
+  }, {
+    isActive: inputActive,
   });
 
   /**
@@ -47,7 +56,14 @@ const MealOptionsManager = () => {
     setUserSelected("");
   }, []);
 
+  // 路線選擇
   switch (userSelected) {
+    case "add":
+      return <AddMealPage />;
+    case "edit":
+      return <App />;
+    case "delete":
+      return <App />;
     case "escape":
       return <App />;
 
