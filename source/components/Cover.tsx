@@ -28,7 +28,7 @@ const Cover = (): JSX.Element => (
       </Box>
       <Box margin={1}>
         <Text color="red">[Q]</Text>
-        <Text>落荒而逃，只能吃土去了 ☠️</Text>
+        <Text>Good Bye~ ☠️</Text>
       </Box>
     </Box>
     <Box marginTop={3}>

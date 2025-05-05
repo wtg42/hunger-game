@@ -70,11 +70,11 @@ const AddMealPage = () => {
         description: logs[3],
         metadata: "", // 之後會有其他頁面功能寫入
       });
-      // 故意停個三秒讓用戶看自己輸入的列表
+      // 故意停個幾秒讓用戶看自己輸入的列表
       timer = setTimeout(() => {
         // You don't need to do anything.
         setIsSaved(true);
-      }, 3000);
+      }, 2000);
     } catch (error) {
       // TODO: Handle errors
     }
@@ -146,7 +146,7 @@ const AddMealPage = () => {
             borderColor="green"
             borderStyle={"round"}
           >
-            <Text color="cyan">{inputStatement || " "}</Text>
+            <Text color="cyan">▶ {inputStatement || " "}</Text>
           </Box>
       )}
     </Box>
