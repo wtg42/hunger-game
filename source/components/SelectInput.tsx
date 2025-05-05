@@ -1,5 +1,5 @@
 import { Box, Text, useInput } from "ink";
-import React, { useState, memo } from "react";
+import React, { memo, useState } from "react";
 
 // 使用泛型 T 來代表 value 的型別
 type OptionItem<T> = {
@@ -45,7 +45,12 @@ const SelectInputComponent = <T,>(
       >
         {optionItems.map((item, i) => (
           // 如果 T 不是 string 或 number，key 可能需要調整
-          <Text key={typeof item.value === 'string' || typeof item.value === 'number' ? item.value : i}>
+          <Text
+            key={typeof item.value === "string" ||
+                typeof item.value === "number"
+              ? item.value
+              : i}
+          >
             {i === index ? "> " : "  "}
             {item.label}
           </Text>

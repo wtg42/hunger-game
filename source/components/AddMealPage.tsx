@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Text, useInput } from "ink";
 import { addMealOption } from "../db.js";
 import App from "../app.js";
+import TextInput from "./TextInput.js";
 
 // 定義要詢問用戶的問題列表
 const questions = [
@@ -32,7 +33,7 @@ const AddMealPage = () => {
   // 判斷是否已儲存到 DB
   const [isSaved, setIsSaved] = useState(false);
 
-  useInput((input, key) => {
+  useInput((_, key) => {
     if (key.return) {
       setStep((prev) => {
         if (prev >= questions.length) {
@@ -52,7 +53,6 @@ const AddMealPage = () => {
       setInputStatetment("");
       return;
     }
-    setInputStatetment((prev) => prev + input);
   });
 
   // 問卷內容寫入 DB
@@ -101,6 +101,20 @@ const AddMealPage = () => {
     };
   }, [isSaved]);
 
+  /**
+   * Update input statement
+   */
+  const handleOnChange = (value: string) => {
+    setInputStatetment((prev) => prev + value);
+  };
+
+  /**
+   * Update input statement when delete
+   */
+  const handleOnDelete = (value: string) => {
+    setInputStatetment(value);
+  };
+
   if (goHome) {
     return <App />;
   }
@@ -140,14 +154,20 @@ const AddMealPage = () => {
         )}
       </Box>
       {!questionDone && (
-          <Box
-            flexDirection="column"
-            margin={1}
-            borderColor="green"
-            borderStyle={"round"}
+        <Box
+          flexDirection="column"
+          margin={1}
+          borderColor="green"
+          borderStyle={"round"}
+        >
+          {/* <Text color="cyan">▶ {inputStatement || " "}</Text> */}
+          <TextInput
+            value={inputStatement}
+            onChange={handleOnChange}
+            onDelete={handleOnDelete}
           >
-            <Text color="cyan">▶ {inputStatement || " "}</Text>
-          </Box>
+          </TextInput>
+        </Box>
       )}
     </Box>
   );

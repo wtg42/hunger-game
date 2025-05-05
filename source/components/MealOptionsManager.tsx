@@ -72,7 +72,7 @@ const MealOptionsManager = () => {
         <Notification
           message="Use [Ctrl + c] to exit."
           duration={1000}
-          onDone={ handleOnDone }
+          onDone={handleOnDone}
         />
       );
   }

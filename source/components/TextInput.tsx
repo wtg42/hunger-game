@@ -1,29 +1,43 @@
-import React, { useState } from "react";
+import React from "react";
 import { Box, Text, useInput } from "ink";
 
 const cursor = "▶ ";
-const TextInput = ({value, onChange}: {value: string, onChange: (value: string) => void}) => {
+/**
+ * 自訂的 input 元件
+ */
+const TextInput = (
+  { value, onChange, onDelete, color }: {
+    value: string;
+    /**
+     * Callback function triggered when the delete\
+     * or backspace key is pressed.
+     */
+    onChange: (value: string) => void;
+    /**
+     * Callback function triggered when the delete\
+     * or backspace key is pressed.
+     */
+    onDelete: (value: string) => void;
+    color?: string;
+  },
+) => {
   React.useEffect(() => {
-    onChange("")
-  }, [])
-
-  const [ active, setActive ] = useState(true)
+    onChange("");
+  }, []);
 
   useInput((input, key) => {
-    if (key.return) {
-      setActive(false)
+    if (key.delete || key.backspace) {
+      onDelete(value.slice(0, -1));
       return
     }
-    onChange(input)
-  }, {
-    isActive: active
-  })
+    onChange(input);
+  });
 
   return (
     <Box>
-      <Text>{cursor + value}</Text>
+      <Text color={color}>{cursor + (value || " ")}</Text>
     </Box>
-  )
-}
+  );
+};
 
 export default TextInput;
