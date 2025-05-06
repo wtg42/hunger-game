@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { useInput } from "ink";
+import { Text, useInput } from "ink";
 import App from "../app.js";
 import SelectInput from "./SelectInput.js";
 import Notification from "./Notification.js";
@@ -9,7 +9,7 @@ const mealOptions: { label: string; value: string }[] = [
   { label: "新增餐點", value: "add" },
   { label: "編輯餐點", value: "edit" },
   { label: "刪除餐點", value: "delete" },
-  { label: "返回", value: "q" },
+  { label: "返回", value: "escape" },
 ];
 
 /**
@@ -61,9 +61,9 @@ const MealOptionsManager = () => {
     case "add":
       return <AddMealPage />;
     case "edit":
-      return <App />;
+      return <Text color="yellowBright">Still working on it</Text>; // return <div />;
     case "delete":
-      return <App />;
+      return <Text color="yellowBright">Still working on it</Text>; // return <div />;
     case "escape":
       return <App />;
 

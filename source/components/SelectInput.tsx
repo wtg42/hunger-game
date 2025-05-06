@@ -25,10 +25,10 @@ const SelectInputComponent = <T,>(
   // Cursor position
   const [index, setIndex] = useState(0);
 
-  useInput((_, key) => {
-    if (key.upArrow) {
+  useInput((input, key) => {
+    if (key.upArrow || input === "k") {
       setIndex((index) => Math.max(0, index - 1));
-    } else if (key.downArrow) {
+    } else if (key.downArrow || input === "j") {
       // 確保 optionItems[index] 存在才呼叫 onSelect
       setIndex((index) => Math.min(optionItems.length - 1, index + 1));
     } else if (key.return && optionItems[index]) {
@@ -51,7 +51,7 @@ const SelectInputComponent = <T,>(
               ? item.value
               : i}
           >
-            {i === index ? "> " : "  "}
+            {i === index ? "▶ " : "  "}
             {item.label}
           </Text>
         ))}
