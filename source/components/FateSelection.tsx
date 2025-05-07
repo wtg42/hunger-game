@@ -10,25 +10,50 @@ type FateSelectionProps = {
   comment: string;
 };
 
+/**
+ * 經濟狀況對應的描述
+ */
+const walletStatusDecription: Record<InsultsKey, string> = {
+  empty: "💸 錢包空空如也",
+  coins: "🪙 有一些零錢",
+  savings: "💵 小有積蓄",
+  stable: "🏦 穩健富足",
+  rich: "🚀 財富自由",
+};
+
 const FateSelection = ({ walletStatus }: FateSelectionProps): JSX.Element => {
   const [loading, setLoading] = useState(true);
-  const [restaurant, setRestaurant] = useState<string | null>(null);
+  const [restaurant1, setRestaurant1] = useState<string | null>(null);
+  const [restaurant2, setRestaurant2] = useState<string | null>(null);
 
   useEffect(() => {
-    const options = pickRestaurant();
-    // 這邊可以加更細緻的經濟狀態過濾，例如空空的就挑 weight 最低的
-    const picked = options[0]; // 目前先拿第一個當挑選結果
-    setRestaurant(picked?.name || "沒有找到合適的餐廳...");
-    setLoading(false);
+    /**
+     * 定義一個 async 函式來處理非同步操作
+     */
+    const fetchDataAndDelay = async () => {
+      const options = pickRestaurant();
+      // 這邊可以加更細緻的經濟狀態過濾，例如空空的就挑 weight 最低的
+      const picked1 = options[0]; // 目前先拿第一個當挑選結果
+      setRestaurant1(picked1?.name || "沒有找到合適的餐廳...");
+      const picked2 = options[1]; // 目前先拿第一個當挑選結果
+      setRestaurant2(picked2?.name || "沒有找到合適的餐廳...");
 
-    setTimeout(pickRestaurant, 1500); // 小小延遲，做出正在篩選的感覺
+      /**
+       * sleep 函式的定義，或者移到元件外部作為一個輔助函式
+       */
+      const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+      await sleep(5000);
+      setLoading(false);
+    };
+
+    fetchDataAndDelay(); // 呼叫這個 async 函式
   }, [walletStatus]);
 
   if (loading) {
     return (
       <Box flexDirection="column" alignItems="center">
         <Text color="cyan">
-          <Spinner type="dots" /> 正在召喚命運的餐廳...
+          <Spinner type="weather" /> 正在召喚命運的餐廳...
         </Text>
       </Box>
     );
@@ -36,9 +61,9 @@ const FateSelection = ({ walletStatus }: FateSelectionProps): JSX.Element => {
 
   return (
     <Box flexDirection="column" alignItems="center" marginTop={1}>
-      <Text color="green">你的命運餐廳是：</Text>
-      <Text bold color="yellow">{restaurant}</Text>
-      <Text color="gray">（根據你的經濟狀況: {walletStatus}）</Text>
+      <Text color="green">以下是適合像你這種 {walletStatusDecription[walletStatus]} 人類的選項：</Text>
+      <Text bold color="yellow">{restaurant1}</Text>
+      <Text bold color="yellow">{restaurant2}</Text>
     </Box>
   );
 };

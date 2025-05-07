@@ -36,7 +36,7 @@ const BtopLikeTitle = (): JSX.Element => {
             font="block"
           />
         </Gradient>
-        <Text>{version}</Text>
+        <Text>{version} Beta</Text>
       </Box>
     </>
   );
