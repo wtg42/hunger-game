@@ -42,7 +42,7 @@ const FateSelection = ({ walletStatus }: FateSelectionProps): JSX.Element => {
        * sleep 函式的定義，或者移到元件外部作為一個輔助函式
        */
       const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-      await sleep(5000);
+      await sleep(3000);
       setLoading(false);
     };
 
@@ -53,7 +53,7 @@ const FateSelection = ({ walletStatus }: FateSelectionProps): JSX.Element => {
     return (
       <Box flexDirection="column" alignItems="center">
         <Text color="cyan">
-          <Spinner type="weather" /> 正在召喚命運的餐廳...
+          <Spinner type="weather" /> 正在挑選合適的餐廳...
         </Text>
       </Box>
     );

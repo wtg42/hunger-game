@@ -7,9 +7,9 @@ import AddMealPage from "./AddMealPage.js";
 
 const mealOptions: { label: string; value: string }[] = [
   { label: "新增餐點", value: "add" },
-  { label: "編輯餐點", value: "edit" },
-  { label: "刪除餐點", value: "delete" },
-  { label: "返回", value: "escape" },
+  // { label: "編輯餐點", value: "edit" },
+  // { label: "刪除餐點", value: "delete" },
+  // { label: "返回", value: "escape" },
 ];
 
 /**

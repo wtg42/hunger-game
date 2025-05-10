@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Text, useApp, useInput } from "ink";
+import { Box, Text, useApp, useInput } from "ink";
 import SelectInput from "./SelectInput.js";
 import { InsultsKey } from "../types/index.js";
 import FateSelection from "./FateSelection.js";
@@ -63,13 +63,19 @@ const EconomicSurvey = (): JSX.Element => {
   }
 
   return (
-    <>
+    <Box
+      margin={5}
+      gap={3}
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+    >
       <Text>首先我們來看看你的錢包君健康狀態是...</Text>
       <SelectInput
         optionItems={optionItems}
         onSelect={handleOnselect}
       />
-    </>
+    </Box>
   );
 };
 
