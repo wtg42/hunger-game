@@ -28,12 +28,10 @@ import App from './app.js';
 // );
 
 // render(<App name={cli.flags.name} />);
-(async () => {
-	const {waitUntilExit} = render(<App />);
+const {waitUntilExit} = render(<App />);
 
-	try {
-		await waitUntilExit();
-	} catch (error) {
-		console.log('An error occurred as the app was exiting.', error);
-	}
-})();
+try {
+	await waitUntilExit();
+} catch (error: unknown) {
+	console.log('An error occurred as the app was exiting.', error);
+}

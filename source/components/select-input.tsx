@@ -9,8 +9,8 @@ type OptionItem<T> = {
 
 // 在 Props 中也使用泛型 T
 type SelectInputProps<T> = {
-	optionItems: Array<OptionItem<T>>;
-	onSelect: (item: OptionItem<T>) => void;
+	readonly optionItems: Array<OptionItem<T>>;
+	readonly onSelect: (item: OptionItem<T>) => void;
 };
 
 /**
@@ -38,23 +38,21 @@ function SelectInputComponent<T>({
 	});
 
 	return (
-		<>
-			<Box flexDirection="column" borderStyle="round" borderColor="yellow">
-				{optionItems.map((item, i) => (
-					// 如果 T 不是 string 或 number，key 可能需要調整
-					<Text
-						key={
-							typeof item.value === 'string' || typeof item.value === 'number'
-								? item.value
-								: i
-						}
-					>
-						{i === index ? '▶ ' : '  '}
-						{item.label}
-					</Text>
-				))}
-			</Box>
-		</>
+		<Box flexDirection="column" borderStyle="round" borderColor="yellow">
+			{optionItems.map((item, i) => (
+				// 如果 T 不是 string 或 number，key 可能需要調整
+				<Text
+					key={
+						typeof item.value === 'string' || typeof item.value === 'number'
+							? item.value
+							: i
+					}
+				>
+					{i === index ? '▶ ' : '  '}
+					{item.label}
+				</Text>
+			))}
+		</Box>
 	);
 }
 

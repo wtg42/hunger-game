@@ -35,25 +35,13 @@ export default function App(): JSX.Element {
 	);
 
 	if (nextStep === 'return') {
-		return (
-			<>
-				<EconomicSurvey key={restartKey} onRestart={handleRestart} />
-			</>
-		);
+		return <EconomicSurvey key={restartKey} onRestart={handleRestart} />;
 	}
 
 	if (nextStep === 'm') {
 		// 進入餐廳編輯畫面
-		return (
-			<>
-				<MealOptionsManager />
-			</>
-		);
+		return <MealOptionsManager />;
 	}
 
-	return (
-		<>
-			<Cover />
-		</>
-	);
+	return <Cover />;
 }

@@ -7,7 +7,11 @@ import {Text} from 'ink';
  * @example
  * <BlinkingText>Hello World</BlinkingText>
  */
-function BlinkingText({children}: {children: React.ReactNode}): JSX.Element {
+function BlinkingText({
+	children,
+}: {
+	readonly children: React.ReactNode;
+}): JSX.Element {
 	// 顯示或隱藏文字
 	const [visible, setVisible] = useState(true);
 
