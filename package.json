@@ -12,7 +12,9 @@
 	"scripts": {
 		"build": "tsc",
 		"dev": "tsc --watch",
-		"test": "prettier --check . && xo && ava"
+		"test": "prettier --check . && xo && vitest run",
+		"test:dev": "vitest",
+		"test:ui": "vitest --ui"
 	},
 	"files": [
 		"dist"
@@ -29,6 +31,7 @@
 	},
 	"devDependencies": {
 		"@sindresorhus/tsconfig": "^3.0.1",
+		"@testing-library/react": "^16.3.0",
 		"@types/figlet": "^1.7.0",
 		"@types/proxyquire": "^1.3.31",
 		"@types/react": "^18.0.32",
@@ -38,11 +41,12 @@
 		"eslint-config-xo-react": "^0.27.0",
 		"eslint-plugin-react": "^7.32.2",
 		"eslint-plugin-react-hooks": "^4.6.0",
-		"ink-testing-library": "^3.0.0",
+		"ink-testing-library": "^4.0.0",
 		"prettier": "^2.8.7",
 		"proxyquire": "^2.1.3",
 		"ts-node": "^10.9.1",
 		"typescript": "^5.0.3",
+		"vitest": "^3.2.4",
 		"xo": "^0.53.1"
 	},
 	"ava": {

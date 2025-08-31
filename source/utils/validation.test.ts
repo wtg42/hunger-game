@@ -1,4 +1,4 @@
-import test from 'ava';
+import {test, expect} from 'vitest';
 import {
 	validateMealName,
 	validateMealWeight,
@@ -8,16 +8,16 @@ import {
 	sanitizeString,
 } from './validation.js';
 
-test('validateMealName - valid names', t => {
+test('validateMealName - valid names', () => {
 	const validNames = ['牛肉麵', 'Pizza', '壽司', '123', '餐廳名稱'];
 
 	for (const name of validNames) {
 		const result = validateMealName(name);
-		t.true(result.isValid, `Name "${name}" should be valid`);
+		expect(result.isValid).toBe(true);
 	}
 });
 
-test('validateMealName - empty or invalid names', t => {
+test('validateMealName - empty or invalid names', () => {
 	const invalidCases = [
 		{input: '', expectedError: '餐點名稱不能為空'},
 		{input: '   ', expectedError: '餐點名稱不能為空'},
@@ -28,12 +28,12 @@ test('validateMealName - empty or invalid names', t => {
 
 	for (const {input, expectedError} of invalidCases) {
 		const result = validateMealName(input);
-		t.false(result.isValid, `Name "${input}" should be invalid`);
-		t.is(result.error, expectedError);
+		expect(result.isValid).toBe(false);
+		expect(result.error).toBe(expectedError);
 	}
 });
 
-test('validateMealWeight - valid weights', t => {
+test('validateMealWeight - valid weights', () => {
 	const validWeights = [
 		{input: '1', expected: 1},
 		{input: '5', expected: 5},
@@ -43,12 +43,12 @@ test('validateMealWeight - valid weights', t => {
 
 	for (const {input, expected} of validWeights) {
 		const result = validateMealWeight(input);
-		t.true(result.isValid, `Weight ${input} should be valid`);
-		t.is(result.value, expected);
+		expect(result.isValid).toBe(true);
+		expect(result.value).toBe(expected);
 	}
 });
 
-test('validateMealWeight - invalid weights', t => {
+test('validateMealWeight - invalid weights', () => {
 	const invalidCases = [
 		{input: '0', expectedError: '權重必須在 1-5 之間'},
 		{input: '6', expectedError: '權重必須在 1-5 之間'},
@@ -60,21 +60,21 @@ test('validateMealWeight - invalid weights', t => {
 
 	for (const {input, expectedError} of invalidCases) {
 		const result = validateMealWeight(input);
-		t.false(result.isValid, `Weight "${input}" should be invalid`);
-		t.is(result.error, expectedError);
+		expect(result.isValid).toBe(false);
+		expect(result.error).toBe(expectedError);
 	}
 });
 
-test('validateMealTags - valid tags', t => {
+test('validateMealTags - valid tags', () => {
 	const validTags = ['', ' ', '中式,日式', 'vegetarian,spicy', '測試標籤'];
 
 	for (const tags of validTags) {
 		const result = validateMealTags(tags);
-		t.true(result.isValid, `Tags "${tags}" should be valid`);
+		expect(result.isValid).toBe(true);
 	}
 });
 
-test('validateMealTags - invalid tags', t => {
+test('validateMealTags - invalid tags', () => {
 	const invalidCases = [
 		{input: 'a'.repeat(101), expectedError: 'Tags 不能超過100個字元'},
 		{input: '測試<script>', expectedError: 'Tags 包含無效字元'},
@@ -82,12 +82,12 @@ test('validateMealTags - invalid tags', t => {
 
 	for (const {input, expectedError} of invalidCases) {
 		const result = validateMealTags(input);
-		t.false(result.isValid, `Tags "${input}" should be invalid`);
-		t.is(result.error, expectedError);
+		expect(result.isValid).toBe(false);
+		expect(result.error).toBe(expectedError);
 	}
 });
 
-test('validateMealDescription - valid descriptions', t => {
+test('validateMealDescription - valid descriptions', () => {
 	const validDescriptions = [
 		'',
 		' ',
@@ -97,11 +97,11 @@ test('validateMealDescription - valid descriptions', t => {
 
 	for (const desc of validDescriptions) {
 		const result = validateMealDescription(desc);
-		t.true(result.isValid, `Description "${desc}" should be valid`);
+		expect(result.isValid).toBe(true);
 	}
 });
 
-test('validateMealDescription - invalid descriptions', t => {
+test('validateMealDescription - invalid descriptions', () => {
 	const invalidCases = [
 		{input: 'a'.repeat(201), expectedError: '描述不能超過200個字元'},
 		{input: '測試<script>', expectedError: '描述包含無效字元'},
@@ -109,12 +109,12 @@ test('validateMealDescription - invalid descriptions', t => {
 
 	for (const {input, expectedError} of invalidCases) {
 		const result = validateMealDescription(input);
-		t.false(result.isValid, `Description "${input}" should be invalid`);
-		t.is(result.error, expectedError);
+		expect(result.isValid).toBe(false);
+		expect(result.error).toBe(expectedError);
 	}
 });
 
-test('validateMealInput - valid complete input', t => {
+test('validateMealInput - valid complete input', () => {
 	const validInputs = [
 		['牛肉麵', '5', '中式,湯麵', '經典台灣小吃'],
 		['Pizza', '3', '義式,起司', ''],
@@ -123,12 +123,12 @@ test('validateMealInput - valid complete input', t => {
 
 	for (const input of validInputs) {
 		const result = validateMealInput(input);
-		t.true(result.isValid, `Input ${JSON.stringify(input)} should be valid`);
-		t.truthy(result.data);
+		expect(result.isValid).toBe(true);
+		expect(result.data).toBeTruthy();
 	}
 });
 
-test('validateMealInput - invalid inputs', t => {
+test('validateMealInput - invalid inputs', () => {
 	const invalidCases = [
 		{
 			input: ['', '5', 'tags', 'desc'],
@@ -158,18 +158,18 @@ test('validateMealInput - invalid inputs', t => {
 
 	for (const {input, expectedErrors} of invalidCases) {
 		const result = validateMealInput(input);
-		t.false(result.isValid, `Input ${JSON.stringify(input)} should be invalid`);
-		t.deepEqual(result.errors, expectedErrors);
+		expect(result.isValid).toBe(false);
+		expect(result.errors).toEqual(expectedErrors);
 	}
 });
 
-test('validateMealInput - insufficient input', t => {
+test('validateMealInput - insufficient input', () => {
 	const result = validateMealInput(['牛肉麵']); // Only name, missing weight
-	t.false(result.isValid);
-	t.deepEqual(result.errors, ['必須提供餐點名稱和權重']);
+	expect(result.isValid).toBe(false);
+	expect(result.errors).toEqual(['必須提供餐點名稱和權重']);
 });
 
-test('sanitizeString - basic functionality', t => {
+test('sanitizeString - basic functionality', () => {
 	const testCases = [
 		{input: '  hello world  ', expected: 'hello world'},
 		{input: 'test<script>alert("xss")</script>', expected: 'testalert("xss")'},
@@ -180,6 +180,6 @@ test('sanitizeString - basic functionality', t => {
 
 	for (const {input, expected} of testCases) {
 		const result = sanitizeString(input);
-		t.is(result, expected);
+		expect(result).toBe(expected);
 	}
 });
