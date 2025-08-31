@@ -62,7 +62,11 @@ export function validateMealWeight(weight: string | number): {
 		return {isValid: false, error: '權重必須是整數'};
 	}
 
-	if (numberWeight < 1 || numberWeight > 5) {
+	if (numberWeight <= 0) {
+		return {isValid: false, error: '權重必須是有效的數字'};
+	}
+
+	if (numberWeight > 5) {
 		return {isValid: false, error: '權重必須在 1-5 之間'};
 	}
 
@@ -188,6 +192,7 @@ export function sanitizeString(input: string): string {
 
 	return input
 		.trim()
-		.replace(/[<>"'&]/g, '') // Remove potentially harmful characters
+		.replace(/<\/?script[^>]*>/gi, '') // Remove script tags
+		.replace(/[<>&]/g, '') // Remove potentially harmful characters
 		.slice(0, 1000); // Prevent extremely long inputs
 }

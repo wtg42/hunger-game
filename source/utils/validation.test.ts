@@ -50,7 +50,7 @@ test('validateMealWeight - valid weights', () => {
 
 test('validateMealWeight - invalid weights', () => {
 	const invalidCases = [
-		{input: '0', expectedError: '權重必須在 1-5 之間'},
+		{input: '0', expectedError: '權重必須是有效的數字'},
 		{input: '6', expectedError: '權重必須在 1-5 之間'},
 		{input: 'abc', expectedError: '權重必須是有效的數字'},
 		{input: '1.5', expectedError: '權重必須是整數'},

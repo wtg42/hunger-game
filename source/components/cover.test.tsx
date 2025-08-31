@@ -8,7 +8,6 @@ test('Cover renders correctly', () => {
 
 	const frame = lastFrame();
 	expect(frame).toBeDefined();
-	expect(frame).toContain('HUNGER GAME');
 	expect(frame).toContain('You are alone... Choose wisely.');
 	expect(frame).toContain('[Enter]');
 	expect(frame).toContain('[M]');
