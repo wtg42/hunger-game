@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {Box, Text, useInput} from 'ink';
-import App from '../app.js';
-import TextInput from './text-input.js';
-import Notification from './notification.js';
 import {
 	validateMealInput,
 	validateMealName,
 	validateMealWeight,
 } from '../utils/validation.js';
+import App from '../app.js';
+import TextInput from './text-input.js';
+import Notification from './notification.js';
 
 // 定義要詢問用戶的問題列表
 const questions = [
@@ -35,11 +35,11 @@ function AddMealPage({
 	addMeal,
 	App: AppComponent,
 }: {
-	addMeal: AddMeal;
-	App?: React.ComponentType;
+	readonly addMeal: AddMeal;
+	readonly App?: React.ComponentType;
 }): JSX.Element {
 	// 用戶當前輸入的內容
-	const [inputStatement, setInputStatetment] = useState('');
+	const [inputStatement, setInputStatement] = useState('');
 
 	// 儲存用戶對每個問題的回答
 	const [logs, setLogs] = useState<string[]>([]);
@@ -63,22 +63,22 @@ function AddMealPage({
 
 	useInput((_, key) => {
 		if (key.return) {
-			setStep(prev => {
-				if (prev >= questions.length) {
-					return prev;
+			setStep((previous: number) => {
+				if (previous >= questions.length) {
+					return previous;
 				}
-				return prev + 1;
+				return previous + 1;
 			});
 
-			// write into logs and reset input.
-			setLogs(prev => {
+			// Write into logs and reset input.
+			setLogs((previous: string[]) => {
 				// 問題已回答完畢只需要顯示已有的回答
 				if (questionDone) {
-					return prev;
+					return previous;
 				}
-				return [...prev, inputStatement];
+				return [...previous, inputStatement];
 			});
-			setInputStatetment('');
+			setInputStatement('');
 			return;
 		}
 	});
@@ -89,7 +89,7 @@ function AddMealPage({
 			return;
 		}
 
-		let timer: NodeJS.Timeout | undefined = undefined;
+		let timer: NodeJS.Timeout | undefined;
 		try {
 			// 驗證輸入資料
 			const validation = validateMealInput(logs);
@@ -115,7 +115,7 @@ function AddMealPage({
 				// You don't need to do anything.
 				setIsSaved(true);
 			}, 2000);
-		} catch (error) {
+		} catch (error: unknown) {
 			// 發生錯誤時保持在頁面並顯示訊息
 			setIsSaved(false);
 			const message = error instanceof Error ? error.message : 'Unknown error';
@@ -144,7 +144,7 @@ function AddMealPage({
 				const nameValidation = validateMealName(currentInput);
 				setValidationStatus({
 					isValid: nameValidation.isValid,
-					message: nameValidation.isValid ? '' : nameValidation.error || '',
+					message: nameValidation.isValid ? '' : nameValidation.error ?? '',
 				});
 				break;
 			}
@@ -153,12 +153,13 @@ function AddMealPage({
 				const weightValidation = validateMealWeight(currentInput);
 				setValidationStatus({
 					isValid: weightValidation.isValid,
-					message: weightValidation.isValid ? '' : weightValidation.error || '',
+					message: weightValidation.isValid ? '' : weightValidation.error ?? '',
 				});
 				break;
 			}
-			default:
+			default: {
 				setValidationStatus({isValid: true, message: ''});
+			}
 		}
 	}, [inputStatement, step, logs, questionDone]);
 
@@ -183,24 +184,24 @@ function AddMealPage({
 	 * Update input statement
 	 */
 	const handleOnChange = (value: string) => {
-		setInputStatetment(prev => prev + value);
+		setInputStatement((previous: string) => previous + value);
 	};
 
 	/**
 	 * Update input statement when delete
 	 */
 	const handleOnDelete = (value: string) => {
-		setInputStatetment(value);
+		setInputStatement(value);
 	};
 
 	if (goHome) {
-		const Component = AppComponent || App;
+		const Component = AppComponent ?? App;
 		return <Component />;
 	}
 
 	if (isSaved) {
 		return (
-			<Box flexDirection="column" borderColor="yellow" borderStyle={'round'}>
+			<Box flexDirection="column" borderColor="yellow" borderStyle="round">
 				<Text>已儲存</Text>
 			</Box>
 		);
@@ -212,17 +213,15 @@ function AddMealPage({
 				flexDirection="column"
 				margin={1}
 				borderColor="yellow"
-				borderStyle={'round'}
+				borderStyle="round"
 			>
-				<Text color={'cyan'} dimColor={true}>
+				<Text color="cyan" dimColor>
 					{questionDone ? '' : questions[step] ?? ' '}
 				</Text>
 				{questionDone &&
 					logs.length > 0 &&
 					logs.map((item: string, index: number) => (
-						<Text key={`${index}-${item}`}>
-							{`${questions[index]}: ${item}`}
-						</Text>
+						<Text key={item}>{`${questions[index]}: ${item}`}</Text>
 					))}
 			</Box>
 			{!questionDone && (
@@ -230,7 +229,7 @@ function AddMealPage({
 					flexDirection="column"
 					margin={1}
 					borderColor={validationStatus.isValid ? 'green' : 'red'}
-					borderStyle={'round'}
+					borderStyle="round"
 				>
 					{/* <Text color="cyan">▶ {inputStatement || " "}</Text> */}
 					<TextInput
@@ -249,8 +248,10 @@ function AddMealPage({
 				<Box marginY={1}>
 					<Notification
 						message={errorText}
+						onDone={() => {
+							setErrorText('');
+						}}
 						duration={5000}
-						onDone={() => setErrorText('')}
 					/>
 				</Box>
 			)}

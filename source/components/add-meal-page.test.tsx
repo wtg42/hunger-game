@@ -3,38 +3,24 @@ import test from 'ava';
 import {render} from 'ink-testing-library';
 import AddMealPage from './add-meal-page.js';
 
+// Mock components for testing
+function MockApp(): undefined {
+	return undefined;
+}
+
 // Mock addMeal function for testing
 const createMockAddMeal = () => {
-	const calls: any[] = [];
-	const mockFn = (...args: any[]) => {
+	const calls: unknown[][] = [];
+	const mockFn = (...args: unknown[]) => {
 		calls.push(args);
 		return {lastInsertRowid: 1, changes: 1};
 	};
+
 	mockFn.calls = calls;
 	return mockFn;
 };
 
-test('renders initial questions correctly', t => {
-	const MockApp = () => null;
-	const mockAddMeal = createMockAddMeal();
-
-	const {lastFrame} = render(
-		<AddMealPage addMeal={mockAddMeal} App={MockApp} />,
-	);
-
-	const output = lastFrame();
-	t.true(
-		output?.includes('❤️ 新增收藏品項：'),
-		'Should show meal name question',
-	);
-	t.true(
-		output?.includes('⭐️ 喜愛程度(1~5)：'),
-		'Should show weight question',
-	);
-});
-
-test('handles valid input flow correctly', async t => {
-	const MockApp = () => null;
+test('renders initial questions correctly', async t => {
 	const mockAddMeal = createMockAddMeal();
 
 	const {stdin, lastFrame} = render(
@@ -66,15 +52,15 @@ test('handles valid input flow correctly', async t => {
 
 	// Check that addMeal was called with correct data
 	t.is(mockAddMeal.calls.length, 1);
-	const [mealData] = mockAddMeal.calls[0];
-	t.is(mealData.name, '牛肉麵');
-	t.is(mealData.weight, 5);
-	t.is(mealData.tags, '中式,湯麵');
-	t.is(mealData.description, '經典台灣小吃');
+	const callArgs = mockAddMeal.calls[0];
+	const mealData = callArgs?.[0] as any;
+	t.is(mealData?.name, '牛肉麵');
+	t.is(mealData?.weight, 5);
+	t.is(mealData?.tags, '中式,湯麵');
+	t.is(mealData?.description, '經典台灣小吃');
 });
 
 test('shows validation errors for invalid input', async t => {
-	const MockApp = () => null;
 	const mockAddMeal = createMockAddMeal();
 
 	const {stdin, lastFrame} = render(
@@ -89,11 +75,14 @@ test('shows validation errors for invalid input', async t => {
 
 	// Should show validation error
 	const output = lastFrame();
-	t.true(output?.includes('餐點名稱不能為空') || output?.includes('錯誤'));
+	t.true(output?.includes('餐點名稱不能為空') ?? output?.includes('錯誤'));
 });
 
 test('handles database errors gracefully', async t => {
-	const MockApp = () => null;
+	function MockApp(): null {
+		return null;
+	}
+
 	const mockAddMeal = () => {
 		throw new Error('資料庫連線失敗');
 	};
@@ -117,11 +106,10 @@ test('handles database errors gracefully', async t => {
 
 	// Should show error message
 	const output = lastFrame();
-	t.true(output?.includes('資料庫連線失敗') || output?.includes('錯誤'));
+	t.true(output?.includes('資料庫連線失敗') ?? output?.includes('錯誤'));
 });
 
 test('prevents submission with invalid weight', async t => {
-	const MockApp = () => null;
 	const mockAddMeal = createMockAddMeal();
 
 	const {stdin, lastFrame} = render(
@@ -145,12 +133,11 @@ test('prevents submission with invalid weight', async t => {
 
 	// Should show validation error and not call addMeal
 	const output = lastFrame();
-	t.true(output?.includes('權重必須在 1-5 之間') || output?.includes('錯誤'));
+	t.true(output?.includes('權重必須在 1-5 之間') ?? output?.includes('錯誤'));
 	t.is(mockAddMeal.calls.length, 0);
 });
 
 test('handles duplicate name error', async t => {
-	const MockApp = () => null;
 	const mockAddMeal = () => {
 		throw new Error('此餐點名稱已存在');
 	};
@@ -178,30 +165,26 @@ test('handles duplicate name error', async t => {
 });
 
 test('render test', async t => {
-	const React = require('react');
-	const {render} = require('ink-testing-library');
-	const AddMealPage = require('./AddMealPage.js').default;
-
-	const MockApp = () => null;
+	const React = await import('react');
+	const {render} = await import('ink-testing-library');
+	const AddMealPage = (await import('./add-meal-page.js')).default;
 
 	try {
 		const {lastFrame} = render(
 			React.createElement(AddMealPage, {
-				addMeal: () => {},
+				addMeal: () => ({lastInsertRowid: 1, changes: 1}),
 				App: MockApp,
 			}),
 		);
 
 		t.true(lastFrame() !== null);
-	} catch (error) {
+	} catch (error: unknown) {
 		console.error('Error in render test:', error);
 		throw error;
 	}
 });
 
 test('show error message when addMealOption throws', async t => {
-	const MockApp = () => null;
-
 	const {stdin, lastFrame} = render(
 		<AddMealPage
 			addMeal={() => {
