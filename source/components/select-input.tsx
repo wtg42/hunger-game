@@ -9,7 +9,7 @@ type OptionItem<T> = {
 
 // 在 Props 中也使用泛型 T
 type SelectInputProps<T> = {
-	optionItems: OptionItem<T>[];
+	optionItems: Array<OptionItem<T>>;
 	onSelect: (item: OptionItem<T>) => void;
 };
 
@@ -19,10 +19,10 @@ type SelectInputProps<T> = {
  * 傳入要顯示的選項 optionItems 跟 選中後的 callback onSelect()
  */
 // 元件宣告也要加上泛型 T
-const SelectInputComponent = <T,>({
+function SelectInputComponent<T>({
 	optionItems,
 	onSelect,
-}: SelectInputProps<T>): JSX.Element => {
+}: SelectInputProps<T>): JSX.Element {
 	// Cursor position
 	const [index, setIndex] = useState(0);
 
@@ -56,7 +56,7 @@ const SelectInputComponent = <T,>({
 			</Box>
 		</>
 	);
-};
+}
 
 // 使用 React.memo 包裹元件
 const SelectInput = memo(SelectInputComponent) as typeof SelectInputComponent;

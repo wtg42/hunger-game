@@ -1,10 +1,14 @@
 import React, {useCallback, useState} from 'react';
 import {Box, Text, useApp, useInput} from 'ink';
-import SelectInput from './SelectInput.js';
+import SelectInput from './select-input.js';
 import {InsultsKey} from '../types/index.js';
-import FateSelection from './FateSelection.js';
+import FateSelection from './fate-selection.js';
 
-const optionItems: {label: string; value: InsultsKey}[] = [
+type EconomicSurveyProps = {
+	onRestart?: () => void;
+};
+
+const optionItems: Array<{label: string; value: InsultsKey}> = [
 	{label: '💸 錢包空空如也', value: 'empty'},
 	{label: '🪙 有一些零錢', value: 'coins'},
 	{label: '💵 小有積蓄', value: 'savings'},
@@ -24,7 +28,7 @@ const insults: Record<InsultsKey, string> = {
 /**
  * 收集用戶目前錢包君健康狀況做後續判斷
  */
-const EconomicSurvey = (): JSX.Element => {
+function EconomicSurvey({onRestart}: EconomicSurveyProps): JSX.Element {
 	const {exit} = useApp();
 
 	// 要給我用互看的訊息
@@ -61,6 +65,7 @@ const EconomicSurvey = (): JSX.Element => {
 			<FateSelection
 				comment={selectedMessage}
 				walletStatus={userWalletStatus}
+				onRestart={onRestart}
 			/>
 		);
 	}
@@ -77,6 +82,6 @@ const EconomicSurvey = (): JSX.Element => {
 			<SelectInput optionItems={optionItems} onSelect={handleOnselect} />
 		</Box>
 	);
-};
+}
 
 export default EconomicSurvey;

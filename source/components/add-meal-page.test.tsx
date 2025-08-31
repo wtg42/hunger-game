@@ -1,7 +1,7 @@
 import React from 'react';
 import test from 'ava';
 import {render} from 'ink-testing-library';
-import AddMealPage from './AddMealPage.js';
+import AddMealPage from './add-meal-page.js';
 
 // Mock addMeal function for testing
 const createMockAddMeal = () => {

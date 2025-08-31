@@ -1,12 +1,12 @@
 import React, {useCallback, useState} from 'react';
 import {Text, useInput} from 'ink';
 import App from '../app.js';
-import SelectInput from './SelectInput.js';
-import Notification from './Notification.js';
-import AddMealPage from './AddMealPage.js';
+import SelectInput from './select-input.js';
+import Notification from './notification.js';
+import AddMealPage from './add-meal-page.js';
 import {addMealOption} from '../db.js';
 
-const mealOptions: {label: string; value: string}[] = [
+const mealOptions: Array<{label: string; value: string}> = [
 	{label: '新增餐點', value: 'add'},
 	// { label: "編輯餐點", value: "edit" },
 	// { label: "刪除餐點", value: "delete" },
@@ -18,7 +18,7 @@ const mealOptions: {label: string; value: string}[] = [
  *
  * 讓用戶用可以自行新增編輯餐點 DB 內容
  */
-const MealOptionsManager = () => {
+function MealOptionsManager(): JSX.Element {
 	// 用戶選擇
 	const [userSelected, setUserSelected] = useState<string>('');
 
@@ -38,7 +38,7 @@ const MealOptionsManager = () => {
 				return;
 			}
 
-			if (input == 'q') {
+			if (input === 'q') {
 				setUserSelected('q');
 				return;
 			}
@@ -79,6 +79,6 @@ const MealOptionsManager = () => {
 	}
 
 	return <SelectInput optionItems={mealOptions} onSelect={handleOnSelect} />;
-};
+}
 
 export default MealOptionsManager;

@@ -1,7 +1,7 @@
 import Database from 'better-sqlite3';
-import path from 'path';
-import fs from 'fs';
-import os from 'os';
+import path from 'node:path';
+import fs from 'node:fs';
+import os from 'node:os';
 
 // 取得使用者的家目錄
 const homeDir = os.homedir();
@@ -18,13 +18,13 @@ const dbPath = path.join(dbDir, 'db.sqlite');
 // 建立連線
 const db = new Database(dbPath);
 
-// 設定 WAL 模式，如果尚未設定
+// Set WAL mode if not already set
 const journalMode = db.pragma('journal_mode', {simple: true});
 if (journalMode !== 'wal') {
 	db.pragma('journal_mode = WAL');
 }
 
-// 建立資料表（如果不存在）
+// Create table if it doesn't exist
 db.prepare(
 	`
   CREATE TABLE IF NOT EXISTS meal_options (

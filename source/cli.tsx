@@ -4,7 +4,7 @@ import {render} from 'ink';
 // import meow from 'meow';
 import App from './app.js';
 
-// 暫時屏蔽 目前還沒有使用到 flags
+// Temporarily disabled - flags not used yet
 // const cli = meow(
 // 	`
 // 	Usage

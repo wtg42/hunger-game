@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Box, Text, useInput} from 'ink';
 import App from '../app.js';
-import TextInput from './TextInput.js';
-import Notification from './Notification.js';
+import TextInput from './text-input.js';
+import Notification from './notification.js';
 import {
 	validateMealInput,
 	validateMealName,
@@ -31,13 +31,13 @@ type AddMeal = (option: {
 	metadata?: string;
 }) => unknown;
 
-const AddMealPage = ({
+function AddMealPage({
 	addMeal,
 	App: AppComponent,
 }: {
 	addMeal: AddMeal;
 	App?: React.ComponentType;
-}) => {
+}): JSX.Element {
 	// 用戶當前輸入的內容
 	const [inputStatement, setInputStatetment] = useState('');
 
@@ -256,6 +256,6 @@ const AddMealPage = ({
 			)}
 		</Box>
 	);
-};
+}
 
 export default AddMealPage;

@@ -2,18 +2,18 @@
  * Validation utilities for meal input data
  */
 
-export interface MealInput {
+export type MealInput = {
 	name: string;
 	weight: number;
 	tags?: string;
 	description?: string;
-}
+};
 
-export interface ValidationResult {
+export type ValidationResult = {
 	isValid: boolean;
 	errors: string[];
 	data?: MealInput;
-}
+};
 
 /**
  * Validates meal name

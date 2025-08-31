@@ -7,20 +7,20 @@ import {Text} from 'ink';
  * @example
  * <BlinkingText>Hello World</BlinkingText>
  */
-const BlinkingText = ({children}: {children: React.ReactNode}): JSX.Element => {
+function BlinkingText({children}: {children: React.ReactNode}): JSX.Element {
 	// 顯示或隱藏文字
 	const [visible, setVisible] = useState(true);
 
 	// 在掛載時候 設定定時器閃爍
 	useEffect(() => {
 		const interval = setInterval(() => {
-			setVisible(visible => !visible);
+			setVisible(previousVisible => !previousVisible);
 		}, 1000);
 		return () => clearInterval(interval);
 	}, []);
 
 	// You need to leave a space, otherwise the screen will look wired.
 	return visible ? <Text>{children}</Text> : <Text> </Text>;
-};
+}
 
 export default BlinkingText;

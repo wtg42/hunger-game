@@ -1,16 +1,22 @@
 import React, {useState} from 'react';
 import {useApp, useInput} from 'ink';
-import Cover from './components/Cover.js';
-import EconomicSurvey from './components/EconomicSurvey.js';
-import MealOptionsManager from './components/MealOptionsManager.js';
+import Cover from './components/cover.js';
+import EconomicSurvey from './components/economic-survey.js';
+import MealOptionsManager from './components/meal-options-manager.js';
 
 type NextSetp = 'return' | 'm' | '';
 
 export default function App(): JSX.Element {
 	// 判斷用戶按下任意鍵轉換場景
 	const [nextStep, setNextStep] = useState<NextSetp>('');
+	const [restartKey, setRestartKey] = useState(0); // 用來強制重新渲染
 
 	const {exit} = useApp();
+
+	const handleRestart = () => {
+		setNextStep('');
+		setRestartKey(previous => previous + 1); // 強制重新渲染
+	};
 
 	useInput(
 		(input, key) => {
@@ -31,7 +37,7 @@ export default function App(): JSX.Element {
 	if (nextStep === 'return') {
 		return (
 			<>
-				<EconomicSurvey />
+				<EconomicSurvey key={restartKey} onRestart={handleRestart} />
 			</>
 		);
 	}

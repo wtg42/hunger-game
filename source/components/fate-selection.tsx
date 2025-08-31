@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Text} from 'ink';
+import {Box, Text, useInput, useApp} from 'ink';
 import Spinner from 'ink-spinner';
 import {pickRestaurant} from '../db.js'; // 你自己的 db 讀取
 import {InsultsKey} from '../types/index.js';
@@ -8,6 +8,7 @@ type FateSelectionProps = {
 	// 用戶選擇的經濟狀況，例如 "empty", "coins", "savings" 這類
 	walletStatus: InsultsKey;
 	comment: string;
+	onRestart?: () => void;
 };
 
 /**
@@ -21,7 +22,11 @@ const walletStatusDecription: Record<InsultsKey, string> = {
 	rich: '🚀 財富自由',
 };
 
-const FateSelection = ({walletStatus}: FateSelectionProps): JSX.Element => {
+function FateSelection({
+	walletStatus,
+	onRestart,
+}: FateSelectionProps): JSX.Element {
+	const {exit} = useApp();
 	const [loading, setLoading] = useState(true);
 	const [restaurant1, setRestaurant1] = useState<string | null>(null);
 	const [restaurant2, setRestaurant2] = useState<string | null>(null);
@@ -50,6 +55,19 @@ const FateSelection = ({walletStatus}: FateSelectionProps): JSX.Element => {
 		fetchDataAndDelay(); // 呼叫這個 async 函式
 	}, [walletStatus]);
 
+	useInput(
+		(input, _) => {
+			if (input === 'q') {
+				exit();
+			} else if (input === 'r' && onRestart) {
+				onRestart();
+			}
+		},
+		{
+			isActive: !loading,
+		},
+	);
+
 	if (loading) {
 		return (
 			<Box flexDirection="column" alignItems="center">
@@ -71,8 +89,11 @@ const FateSelection = ({walletStatus}: FateSelectionProps): JSX.Element => {
 			<Text bold color="yellow">
 				{restaurant2}
 			</Text>
+			<Box marginTop={2}>
+				<Text color="cyan">按 R 重新開始，按 Q 退出</Text>
+			</Box>
 		</Box>
 	);
-};
+}
 
 export default FateSelection;

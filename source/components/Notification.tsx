@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Box, Text} from 'ink';
 
-const Notification = ({
+function Notification({
 	message,
 	duration,
 	onDone,
@@ -9,7 +9,7 @@ const Notification = ({
 	message: string;
 	duration: number;
 	onDone: () => void;
-}) => {
+}): JSX.Element | null {
 	const [done, setDone] = useState(false);
 
 	useEffect(() => {
@@ -33,6 +33,6 @@ const Notification = ({
 			<Text color="yellow">{message}</Text>
 		</Box>
 	);
-};
+}
 
 export default Notification;

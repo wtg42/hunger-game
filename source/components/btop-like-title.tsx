@@ -2,9 +2,9 @@ import React from 'react';
 import {Box, Text} from 'ink';
 import Gradient from 'ink-gradient';
 import BigText from 'ink-big-text';
-import {readFileSync} from 'fs';
-import {fileURLToPath} from 'url';
-import {dirname, resolve} from 'path';
+import {readFileSync} from 'node:fs';
+import {fileURLToPath} from 'node:url';
+import {dirname, resolve} from 'node:path';
 
 const gameTitle = 'HUNGER GAME';
 
@@ -17,26 +17,24 @@ const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
 const version = packageJson.version;
 
 /**
- *  hunger-game  的標題。
+ * Hunger-game 的標題。
  *
- *  hunger-game  標題的元件，裡面包含了標題的內容 (HUNGER GAME) 和版本號碼。
+ * Hunger-game 標題的元件，裡面包含了標題的內容 (HUNGER GAME) 和版本號碼。
  */
-const BtopLikeTitle = (): JSX.Element => {
+function BtopLikeTitle(): JSX.Element {
 	return (
-		<>
-			<Box
-				flexDirection="row"
-				alignItems="flex-end"
-				justifyContent="center"
-				height="100%"
-			>
-				<Gradient name="rainbow">
-					<BigText text={gameTitle} font="block" />
-				</Gradient>
-				<Text>{version} Beta</Text>
-			</Box>
-		</>
+		<Box
+			flexDirection="row"
+			alignItems="flex-end"
+			justifyContent="center"
+			height="100%"
+		>
+			<Gradient name="rainbow">
+				<BigText text={gameTitle} font="block" />
+			</Gradient>
+			<Text>{version} Beta</Text>
+		</Box>
 	);
-};
+}
 
 export default BtopLikeTitle;
