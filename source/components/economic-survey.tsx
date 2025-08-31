@@ -1,11 +1,11 @@
 import React, {useCallback, useState} from 'react';
 import {Box, Text, useApp, useInput} from 'ink';
+import type {InsultsKey} from '../types/index.js';
 import SelectInput from './select-input.js';
-import {InsultsKey} from '../types/index.js';
 import FateSelection from './fate-selection.js';
 
 type EconomicSurveyProps = {
-	onRestart?: () => void;
+	readonly onRestart?: () => void;
 };
 
 const optionItems: Array<{label: string; value: InsultsKey}> = [
@@ -32,7 +32,9 @@ function EconomicSurvey({onRestart}: EconomicSurveyProps): JSX.Element {
 	const {exit} = useApp();
 
 	// 要給我用互看的訊息
-	const [selectedMessage, setSelectedMessage] = useState<string | null>(null);
+	const [selectedMessage, setSelectedMessage] = useState<string | undefined>(
+		undefined,
+	);
 
 	// 用戶選擇的經濟狀況
 	const [userWalletStatus, setUserWalletStatus] = useState<InsultsKey>('empty');

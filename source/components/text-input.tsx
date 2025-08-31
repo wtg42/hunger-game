@@ -11,22 +11,22 @@ function TextInput({
 	onDelete,
 	color,
 }: {
-	value: string;
+	readonly value: string;
 	/**
 	 * Callback function triggered when the delete
 	 * or backspace key is pressed.
 	 */
-	onChange: (value: string) => void;
+	readonly onChange: (value: string) => void;
 	/**
 	 * Callback function triggered when the delete
 	 * or backspace key is pressed.
 	 */
-	onDelete: (value: string) => void;
-	color?: string;
+	readonly onDelete: (value: string) => void;
+	readonly color?: string;
 }): JSX.Element {
 	React.useEffect(() => {
 		onChange('');
-	}, []);
+	}, [onChange]);
 
 	useInput((input, key) => {
 		if (key.delete || key.backspace) {

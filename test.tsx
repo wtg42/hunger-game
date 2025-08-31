@@ -1,3 +1,4 @@
+import React from 'react';
 import test from 'ava';
 import {render} from 'ink-testing-library';
 import App from './source/app.js';
@@ -7,6 +8,6 @@ test('app renders without crashing', t => {
 
 	// Just check that it renders something
 	const frame = lastFrame();
-	t.true(frame != null);
+	t.true(frame !== null);
 	t.true(frame && frame.length > 0);
 });

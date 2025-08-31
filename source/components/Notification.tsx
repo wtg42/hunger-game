@@ -6,10 +6,10 @@ function Notification({
 	duration,
 	onDone,
 }: {
-	message: string;
-	duration: number;
-	onDone: () => void;
-}): JSX.Element | null {
+	readonly message: string;
+	readonly duration: number;
+	readonly onDone: () => void;
+}): JSX.Element | undefined {
 	const [done, setDone] = useState(false);
 
 	useEffect(() => {
@@ -25,7 +25,7 @@ function Notification({
 	}, [done, onDone]);
 
 	if (done) {
-		return null;
+		return undefined;
 	}
 
 	return (
