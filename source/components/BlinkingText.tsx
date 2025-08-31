@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Text } from "ink";
+import React, {useEffect, useState} from 'react';
+import {Text} from 'ink';
 
 /**
  * 讓子元素 (children) 閃爍顯示的元件。
@@ -7,22 +7,20 @@ import { Text } from "ink";
  * @example
  * <BlinkingText>Hello World</BlinkingText>
  */
-const BlinkingText = (
-  { children }: { children: React.ReactNode },
-): JSX.Element => {
-  // 顯示或隱藏文字
-  const [visible, setVisible] = useState(true);
+const BlinkingText = ({children}: {children: React.ReactNode}): JSX.Element => {
+	// 顯示或隱藏文字
+	const [visible, setVisible] = useState(true);
 
-  // 在掛載時候 設定定時器閃爍
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setVisible((visible) => !visible);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
+	// 在掛載時候 設定定時器閃爍
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setVisible(visible => !visible);
+		}, 1000);
+		return () => clearInterval(interval);
+	}, []);
 
-  // You need to leave a space, otherwise the screen will look wired.
-  return visible ? <Text>{children}</Text> : <Text> </Text>;
+	// You need to leave a space, otherwise the screen will look wired.
+	return visible ? <Text>{children}</Text> : <Text> </Text>;
 };
 
 export default BlinkingText;

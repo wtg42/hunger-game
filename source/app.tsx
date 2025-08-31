@@ -1,51 +1,53 @@
-import React, { useState } from "react";
-import { useApp, useInput } from "ink";
-import Cover from "./components/Cover.js";
-import EconomicSurvey from "./components/EconomicSurvey.js";
-import MealOptionsManager from "./components/MealOptionsManager.js";
+import React, {useState} from 'react';
+import {useApp, useInput} from 'ink';
+import Cover from './components/Cover.js';
+import EconomicSurvey from './components/EconomicSurvey.js';
+import MealOptionsManager from './components/MealOptionsManager.js';
 
-type NextSetp = "return" | "m" | "";
+type NextSetp = 'return' | 'm' | '';
 
 export default function App(): JSX.Element {
-  // 判斷用戶按下任意鍵轉換場景
-  const [nextStep, setNextStep] = useState<NextSetp>("");
+	// 判斷用戶按下任意鍵轉換場景
+	const [nextStep, setNextStep] = useState<NextSetp>('');
 
-  const { exit } = useApp();
+	const {exit} = useApp();
 
-  useInput((input, key) => {
-    if (input === "q") {
-      exit();
-    } else if (key.return) {
-      setNextStep("return");
-    } else if (input === "m") {
-      // 進入餐廳編輯畫面
-      setNextStep("m");
-    }
-  }, {
-    isActive: !nextStep,
-  });
+	useInput(
+		(input, key) => {
+			if (input === 'q') {
+				exit();
+			} else if (key.return) {
+				setNextStep('return');
+			} else if (input === 'm') {
+				// 進入餐廳編輯畫面
+				setNextStep('m');
+			}
+		},
+		{
+			isActive: !nextStep,
+		},
+	);
 
-  if (nextStep === "return") {
-    return (
-      <>
-        <EconomicSurvey />
-      </>
-    );
-  }
+	if (nextStep === 'return') {
+		return (
+			<>
+				<EconomicSurvey />
+			</>
+		);
+	}
 
-  if (nextStep === "m") {
-    // 進入餐廳編輯畫面
-    return (
-      <>
-        <MealOptionsManager />
-      </>
-    )
+	if (nextStep === 'm') {
+		// 進入餐廳編輯畫面
+		return (
+			<>
+				<MealOptionsManager />
+			</>
+		);
+	}
 
-  }
-
-  return (
-    <>
-      <Cover />
-    </>
-  );
+	return (
+		<>
+			<Cover />
+		</>
+	);
 }

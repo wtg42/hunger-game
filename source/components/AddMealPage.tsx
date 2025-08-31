@@ -3,6 +3,11 @@ import {Box, Text, useInput} from 'ink';
 import App from '../app.js';
 import TextInput from './TextInput.js';
 import Notification from './Notification.js';
+import {
+	validateMealInput,
+	validateMealName,
+	validateMealWeight,
+} from '../utils/validation.js';
 
 // 定義要詢問用戶的問題列表
 const questions = [
@@ -26,7 +31,13 @@ type AddMeal = (option: {
 	metadata?: string;
 }) => unknown;
 
-const AddMealPage = ({addMeal}: {addMeal: AddMeal}) => {
+const AddMealPage = ({
+	addMeal,
+	App: AppComponent,
+}: {
+	addMeal: AddMeal;
+	App?: React.ComponentType;
+}) => {
 	// 用戶當前輸入的內容
 	const [inputStatement, setInputStatetment] = useState('');
 
@@ -43,6 +54,12 @@ const AddMealPage = ({addMeal}: {addMeal: AddMeal}) => {
 	const [isSaved, setIsSaved] = useState(false);
 	// 儲存錯誤訊息，顯示於 UI
 	const [errorText, setErrorText] = useState<string>('');
+
+	// 即時驗證狀態
+	const [validationStatus, setValidationStatus] = useState<{
+		isValid: boolean;
+		message: string;
+	}>({isValid: true, message: ''});
 
 	useInput((_, key) => {
 		if (key.return) {
@@ -74,13 +91,25 @@ const AddMealPage = ({addMeal}: {addMeal: AddMeal}) => {
 
 		let timer: NodeJS.Timeout | undefined = undefined;
 		try {
+			// 驗證輸入資料
+			const validation = validateMealInput(logs);
+			if (!validation.isValid) {
+				throw new Error(validation.errors.join('\n'));
+			}
+
+			// 確保驗證通過後有資料
+			if (!validation.data) {
+				throw new Error('驗證通過但沒有資料');
+			}
+
 			addMeal({
-				name: logs[0] ?? '',
-				weight: Number(logs[1]),
-				tags: logs[2],
-				description: logs[3],
+				name: validation.data.name,
+				weight: validation.data.weight,
+				tags: validation.data.tags,
+				description: validation.data.description,
 				metadata: '', // 之後會有其他頁面功能寫入
 			});
+
 			// 故意停個幾秒讓用戶看自己輸入的列表
 			timer = setTimeout(() => {
 				// You don't need to do anything.
@@ -96,7 +125,42 @@ const AddMealPage = ({addMeal}: {addMeal: AddMeal}) => {
 		return () => {
 			clearTimeout(timer);
 		};
-	}, [questionDone]);
+	}, [questionDone, logs, addMeal]);
+
+	// 即時驗證當前輸入
+	useEffect(() => {
+		if (logs.length === 0 || questionDone) {
+			setValidationStatus({isValid: true, message: ''});
+			return;
+		}
+
+		const currentStep = step;
+		const currentInput = inputStatement;
+
+		// 根據當前步驟進行驗證
+		switch (currentStep) {
+			case 0: {
+				// 餐點名稱驗證
+				const nameValidation = validateMealName(currentInput);
+				setValidationStatus({
+					isValid: nameValidation.isValid,
+					message: nameValidation.isValid ? '' : nameValidation.error || '',
+				});
+				break;
+			}
+			case 1: {
+				// 權重驗證
+				const weightValidation = validateMealWeight(currentInput);
+				setValidationStatus({
+					isValid: weightValidation.isValid,
+					message: weightValidation.isValid ? '' : weightValidation.error || '',
+				});
+				break;
+			}
+			default:
+				setValidationStatus({isValid: true, message: ''});
+		}
+	}, [inputStatement, step, logs, questionDone]);
 
 	// 時間到自動切換到首頁
 	const [goHome, setGoHome] = useState(false);
@@ -130,7 +194,8 @@ const AddMealPage = ({addMeal}: {addMeal: AddMeal}) => {
 	};
 
 	if (goHome) {
-		return <App />;
+		const Component = AppComponent || App;
+		return <Component />;
 	}
 
 	if (isSaved) {
@@ -164,7 +229,7 @@ const AddMealPage = ({addMeal}: {addMeal: AddMeal}) => {
 				<Box
 					flexDirection="column"
 					margin={1}
-					borderColor="green"
+					borderColor={validationStatus.isValid ? 'green' : 'red'}
 					borderStyle={'round'}
 				>
 					{/* <Text color="cyan">▶ {inputStatement || " "}</Text> */}
@@ -172,15 +237,22 @@ const AddMealPage = ({addMeal}: {addMeal: AddMeal}) => {
 						value={inputStatement}
 						onChange={handleOnChange}
 						onDelete={handleOnDelete}
-					></TextInput>
+					/>
+					{!validationStatus.isValid && validationStatus.message && (
+						<Text color="red" dimColor>
+							⚠️ {validationStatus.message}
+						</Text>
+					)}
 				</Box>
 			)}
 			{errorText && (
-				<Notification
-					message={errorText}
-					duration={3000}
-					onDone={() => setErrorText('')}
-				/>
+				<Box marginY={1}>
+					<Notification
+						message={errorText}
+						duration={5000}
+						onDone={() => setErrorText('')}
+					/>
+				</Box>
 			)}
 		</Box>
 	);
