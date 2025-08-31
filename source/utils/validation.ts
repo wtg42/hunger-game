@@ -36,7 +36,7 @@ export function validateMealName(name: string): {
 	}
 
 	// Check for potentially harmful characters
-	const harmfulChars = /[<>\"'&]/;
+	const harmfulChars = /[<>"'&]/;
 	if (harmfulChars.test(trimmedName)) {
 		return {isValid: false, error: '餐點名稱包含無效字元'};
 	}
@@ -52,21 +52,21 @@ export function validateMealWeight(weight: string | number): {
 	error?: string;
 	value?: number;
 } {
-	const numWeight = typeof weight === 'string' ? Number(weight) : weight;
+	const numberWeight = typeof weight === 'string' ? Number(weight) : weight;
 
-	if (isNaN(numWeight)) {
+	if (Number.isNaN(numberWeight)) {
 		return {isValid: false, error: '權重必須是有效的數字'};
 	}
 
-	if (!Number.isInteger(numWeight)) {
+	if (!Number.isInteger(numberWeight)) {
 		return {isValid: false, error: '權重必須是整數'};
 	}
 
-	if (numWeight < 1 || numWeight > 5) {
+	if (numberWeight < 1 || numberWeight > 5) {
 		return {isValid: false, error: '權重必須在 1-5 之間'};
 	}
 
-	return {isValid: true, value: numWeight};
+	return {isValid: true, value: numberWeight};
 }
 
 /**
@@ -85,7 +85,7 @@ export function validateMealTags(tags: string): {
 	}
 
 	// Check for potentially harmful characters
-	const harmfulChars = /[<>\"'&]/;
+	const harmfulChars = /[<>"'&]/;
 	if (harmfulChars.test(tags)) {
 		return {isValid: false, error: 'Tags 包含無效字元'};
 	}
@@ -109,7 +109,7 @@ export function validateMealDescription(description: string): {
 	}
 
 	// Check for potentially harmful characters
-	const harmfulChars = /[<>\"'&]/;
+	const harmfulChars = /[<>"'&]/;
 	if (harmfulChars.test(description)) {
 		return {isValid: false, error: '描述包含無效字元'};
 	}
@@ -130,10 +130,10 @@ export function validateMealInput(logs: string[]): ValidationResult {
 		};
 	}
 
-	const nameInput = logs[0] || '';
-	const weightInput = logs[1] || '';
-	const tagsInput = logs[2] || '';
-	const descriptionInput = logs[3] || '';
+	const nameInput = logs[0] ?? '';
+	const weightInput = logs[1] ?? '';
+	const tagsInput = logs[2] ?? '';
+	const descriptionInput = logs[3] ?? '';
 
 	// Validate name
 	const nameValidation = validateMealName(nameInput);
@@ -188,6 +188,6 @@ export function sanitizeString(input: string): string {
 
 	return input
 		.trim()
-		.replace(/[<>\"'&]/g, '') // Remove potentially harmful characters
+		.replace(/[<>"'&]/g, '') // Remove potentially harmful characters
 		.slice(0, 1000); // Prevent extremely long inputs
 }

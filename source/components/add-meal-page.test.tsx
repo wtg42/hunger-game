@@ -44,7 +44,9 @@ test('renders initial questions correctly', async t => {
 	stdin.write('\r'); // Enter
 
 	// Wait for processing
-	await new Promise(resolve => setTimeout(resolve, 100));
+	await new Promise(resolve => {
+		setTimeout(resolve, 100);
+	});
 
 	// Check the final output
 	const finalOutput = lastFrame();
@@ -53,7 +55,12 @@ test('renders initial questions correctly', async t => {
 	// Check that addMeal was called with correct data
 	t.is(mockAddMeal.calls.length, 1);
 	const callArgs = mockAddMeal.calls[0];
-	const mealData = callArgs?.[0] as any;
+	const mealData = callArgs?.[0] as {
+		name: string;
+		weight: number;
+		tags: string;
+		description: string;
+	};
 	t.is(mealData?.name, '牛肉麵');
 	t.is(mealData?.weight, 5);
 	t.is(mealData?.tags, '中式,湯麵');
@@ -71,24 +78,26 @@ test('shows validation errors for invalid input', async t => {
 	stdin.write('\r'); // Enter with empty input
 
 	// Wait for processing
-	await new Promise(resolve => setTimeout(resolve, 100));
+	await new Promise(resolve => {
+		setTimeout(resolve, 100);
+	});
 
 	// Should show validation error
 	const output = lastFrame();
 	t.true(output?.includes('餐點名稱不能為空') ?? output?.includes('錯誤'));
 });
 
-test('handles database errors gracefully', async t => {
-	function MockApp(): null {
-		return null;
-	}
+function MockAppForErrorTest(): undefined {
+	return undefined;
+}
 
+test('handles database errors gracefully', async t => {
 	const mockAddMeal = () => {
 		throw new Error('資料庫連線失敗');
 	};
 
 	const {stdin, lastFrame} = render(
-		<AddMealPage addMeal={mockAddMeal} App={MockApp} />,
+		<AddMealPage addMeal={mockAddMeal} App={MockAppForErrorTest} />,
 	);
 
 	// Enter valid data
@@ -102,7 +111,9 @@ test('handles database errors gracefully', async t => {
 	stdin.write('\r');
 
 	// Wait for processing
-	await new Promise(resolve => setTimeout(resolve, 100));
+	await new Promise(resolve => {
+		setTimeout(resolve, 100);
+	});
 
 	// Should show error message
 	const output = lastFrame();
@@ -129,7 +140,9 @@ test('prevents submission with invalid weight', async t => {
 	stdin.write('\r');
 
 	// Wait for processing
-	await new Promise(resolve => setTimeout(resolve, 100));
+	await new Promise(resolve => {
+		setTimeout(resolve, 100);
+	});
 
 	// Should show validation error and not call addMeal
 	const output = lastFrame();
@@ -157,7 +170,9 @@ test('handles duplicate name error', async t => {
 	stdin.write('\r');
 
 	// Wait for processing
-	await new Promise(resolve => setTimeout(resolve, 100));
+	await new Promise(resolve => {
+		setTimeout(resolve, 100);
+	});
 
 	// Should show duplicate error
 	const output = lastFrame();
@@ -167,7 +182,8 @@ test('handles duplicate name error', async t => {
 test('render test', async t => {
 	const React = await import('react');
 	const {render} = await import('ink-testing-library');
-	const AddMealPage = (await import('./add-meal-page.js')).default;
+	const addMealPageModule = await import('./add-meal-page.js');
+	const AddMealPage = addMealPageModule.default;
 
 	try {
 		const {lastFrame} = render(
@@ -200,7 +216,9 @@ test('show error message when addMealOption throws', async t => {
 	}
 
 	// 等待 React 更新
-	await new Promise(resolve => setTimeout(resolve, 0));
+	await new Promise(resolve => {
+		setTimeout(resolve, 0);
+	});
 
 	t.true(lastFrame()?.includes('DB error'));
 });

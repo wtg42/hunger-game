@@ -67,6 +67,7 @@ function AddMealPage({
 				if (previous >= questions.length) {
 					return previous;
 				}
+
 				return previous + 1;
 			});
 
@@ -76,10 +77,11 @@ function AddMealPage({
 				if (questionDone) {
 					return previous;
 				}
+
 				return [...previous, inputStatement];
 			});
+
 			setInputStatement('');
-			return;
 		}
 	});
 
@@ -146,8 +148,10 @@ function AddMealPage({
 					isValid: nameValidation.isValid,
 					message: nameValidation.isValid ? '' : nameValidation.error ?? '',
 				});
+
 				break;
 			}
+
 			case 1: {
 				// 權重驗證
 				const weightValidation = validateMealWeight(currentInput);
@@ -155,8 +159,10 @@ function AddMealPage({
 					isValid: weightValidation.isValid,
 					message: weightValidation.isValid ? '' : weightValidation.error ?? '',
 				});
+
 				break;
 			}
+
 			default: {
 				setValidationStatus({isValid: true, message: ''});
 			}
@@ -171,6 +177,7 @@ function AddMealPage({
 		if (!isSaved) {
 			return;
 		}
+
 		const timer = setTimeout(() => {
 			setGoHome(true);
 		}, 1000);
@@ -210,26 +217,26 @@ function AddMealPage({
 	return (
 		<Box flexDirection="column">
 			<Box
-				flexDirection="column"
 				margin={1}
 				borderColor="yellow"
 				borderStyle="round"
+				flexDirection="column"
 			>
-				<Text color="cyan" dimColor>
+				<Text dimColor color="cyan">
 					{questionDone ? '' : questions[step] ?? ' '}
 				</Text>
 				{questionDone &&
 					logs.length > 0 &&
 					logs.map((item: string, index: number) => (
-						<Text key={item}>{`${questions[index]}: ${item}`}</Text>
+						<Text key={item}>{`${questions[index] ?? ''}: ${item}`}</Text>
 					))}
 			</Box>
 			{!questionDone && (
 				<Box
-					flexDirection="column"
 					margin={1}
 					borderColor={validationStatus.isValid ? 'green' : 'red'}
 					borderStyle="round"
+					flexDirection="column"
 				>
 					{/* <Text color="cyan">▶ {inputStatement || " "}</Text> */}
 					<TextInput
@@ -238,7 +245,7 @@ function AddMealPage({
 						onDelete={handleOnDelete}
 					/>
 					{!validationStatus.isValid && validationStatus.message && (
-						<Text color="red" dimColor>
+						<Text dimColor color="red">
 							⚠️ {validationStatus.message}
 						</Text>
 					)}
@@ -248,10 +255,10 @@ function AddMealPage({
 				<Box marginY={1}>
 					<Notification
 						message={errorText}
+						duration={5000}
 						onDone={() => {
 							setErrorText('');
 						}}
-						duration={5000}
 					/>
 				</Box>
 			)}

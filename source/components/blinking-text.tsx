@@ -20,7 +20,9 @@ function BlinkingText({
 		const interval = setInterval(() => {
 			setVisible(previousVisible => !previousVisible);
 		}, 1000);
-		return () => clearInterval(interval);
+		return () => {
+			clearInterval(interval);
+		};
 	}, []);
 
 	// You need to leave a space, otherwise the screen will look wired.

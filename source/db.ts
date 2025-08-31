@@ -1,7 +1,17 @@
-import Database from 'better-sqlite3';
 import path from 'node:path';
 import fs from 'node:fs';
 import os from 'node:os';
+import Database from 'better-sqlite3';
+
+type MealOption = {
+	id: number;
+	name: string;
+	weight: number;
+	tags?: string;
+	description?: string;
+	metadata?: string;
+	created_at: string;
+};
 
 // 取得使用者的家目錄
 const homeDir = os.homedir();
@@ -19,7 +29,7 @@ const dbPath = path.join(dbDir, 'db.sqlite');
 const db = new Database(dbPath);
 
 // Set WAL mode if not already set
-const journalMode = db.pragma('journal_mode', {simple: true});
+const journalMode = db.pragma('journal_mode', {simple: true}) as string;
 if (journalMode !== 'wal') {
 	db.pragma('journal_mode = WAL');
 }
@@ -40,15 +50,15 @@ db.prepare(
 `,
 ).run();
 
-function getMealOptions() {
-	return db.prepare('SELECT * FROM meal_options').all();
+function getMealOptions(): MealOption[] {
+	return db.prepare('SELECT * FROM meal_options').all() as MealOption[];
 }
 
 function checkDuplicateMealName(name: string): boolean {
 	const result = db
 		.prepare('SELECT id FROM meal_options WHERE name = ?')
-		.get(name);
-	return !!result;
+		.get(name) as {id: number} | undefined;
+	return Boolean(result);
 }
 
 function addMealOption(option: {
@@ -74,25 +84,28 @@ function addMealOption(option: {
 			.run({
 				name: option.name,
 				weight: option.weight,
-				tags: option.tags || null,
-				description: option.description || null,
-				metadata: option.metadata || null,
+				tags: option.tags ?? undefined,
+				description: option.description ?? undefined,
+				metadata: option.metadata ?? undefined,
 			});
-	} catch (error) {
+	} catch (error: unknown) {
 		if (error instanceof Error) {
 			// Handle constraint violations with user-friendly messages
 			if (error.message.includes('CHECK constraint failed')) {
 				if (error.message.includes('weight')) {
 					throw new Error('權重必須在 1-5 之間');
 				}
+
 				if (error.message.includes('length')) {
 					throw new Error('輸入資料過長，請檢查長度限制');
 				}
 			}
+
 			if (error.message.includes('UNIQUE constraint failed')) {
 				throw new Error('此餐點名稱已存在');
 			}
 		}
+
 		throw error;
 	}
 }
@@ -108,11 +121,11 @@ function deleteMealOption(id: number) {
 		.run(id);
 }
 
-function pickRestaurant() {
+function pickRestaurant(): MealOption[] {
 	// 模擬挑選過程：比如依經濟狀況篩選權重高的餐廳
 	return db
 		.prepare(`SELECT * FROM meal_options ORDER BY RANDOM() * weight DESC`)
-		.all();
+		.all() as MealOption[];
 }
 
 export {

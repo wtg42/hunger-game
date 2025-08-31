@@ -1,10 +1,10 @@
 import React, {useCallback, useState} from 'react';
 import {Text, useInput} from 'ink';
 import App from '../app.js';
+import {addMealOption} from '../db.js';
 import SelectInput from './select-input.js';
 import Notification from './notification.js';
 import AddMealPage from './add-meal-page.js';
-import {addMealOption} from '../db.js';
 
 const mealOptions: Array<{label: string; value: string}> = [
 	{label: '新增餐點', value: 'add'},
@@ -51,7 +51,7 @@ function MealOptionsManager(): JSX.Element {
 	);
 
 	/**
-	 * message 結束時間到就返回選項畫面
+	 * Message 結束時間到就返回選項畫面
 	 */
 	const handleOnDone = useCallback(() => {
 		setUserSelected('');
@@ -59,16 +59,23 @@ function MealOptionsManager(): JSX.Element {
 
 	// 路線選擇
 	switch (userSelected) {
-		case 'add':
+		case 'add': {
 			return <AddMealPage addMeal={addMealOption} />;
-		case 'edit':
-			return <Text color="yellowBright">Still working on it</Text>; // return <div />;
-		case 'delete':
-			return <Text color="yellowBright">Still working on it</Text>; // return <div />;
-		case 'escape':
-			return <App />;
+		}
 
-		case 'q':
+		case 'edit': {
+			return <Text color="yellowBright">Still working on it</Text>; // Return <div />;
+		}
+
+		case 'delete': {
+			return <Text color="yellowBright">Still working on it</Text>; // Return <div />;
+		}
+
+		case 'escape': {
+			return <App />;
+		}
+
+		case 'q': {
 			return (
 				<Notification
 					message="Use [Ctrl + c] to exit."
@@ -76,6 +83,12 @@ function MealOptionsManager(): JSX.Element {
 					onDone={handleOnDone}
 				/>
 			);
+		}
+
+		default: {
+			// Default case
+			break;
+		}
 	}
 
 	return <SelectInput optionItems={mealOptions} onSelect={handleOnSelect} />;

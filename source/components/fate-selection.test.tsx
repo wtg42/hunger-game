@@ -10,7 +10,7 @@ test('FateSelection shows loading initially', t => {
 
 	const frame = lastFrame();
 	t.is(typeof frame, 'string');
-	t.true((frame as string).includes('正在挑選合適的餐廳...'));
+	t.true(frame!.includes('正在挑選合適的餐廳...'));
 });
 
 test('FateSelection shows restaurants after loading', async t => {
@@ -19,14 +19,14 @@ test('FateSelection shows restaurants after loading', async t => {
 	);
 
 	// 等待加載完成
-	await new Promise(resolve => setTimeout(resolve, 4000));
+	await new Promise(resolve => {
+		setTimeout(resolve, 4000);
+	});
 
 	const frame = lastFrame();
 	t.is(typeof frame, 'string');
-	t.true(
-		(frame as string).includes('以下是適合像你這種 💵 小有積蓄 人類的選項：'),
-	);
-	t.true((frame as string).includes('按 R 重新開始，按 Q 退出'));
+	t.true(frame!.includes('以下是適合像你這種 💵 小有積蓄 人類的選項：'));
+	t.true(frame!.includes('按 R 重新開始，按 Q 退出'));
 });
 
 test('FateSelection calls onRestart when R is pressed', async t => {
@@ -44,13 +44,17 @@ test('FateSelection calls onRestart when R is pressed', async t => {
 	);
 
 	// 等待加載完成
-	await new Promise(resolve => setTimeout(resolve, 4000));
+	await new Promise(resolve => {
+		setTimeout(resolve, 4000);
+	});
 
 	// 模擬按 R
 	stdin.write('r');
 
 	// 等待事件處理
-	await new Promise(resolve => setTimeout(resolve, 100));
+	await new Promise(resolve => {
+		setTimeout(resolve, 100);
+	});
 
 	t.true(restarted);
 });

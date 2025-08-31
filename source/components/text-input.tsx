@@ -33,6 +33,7 @@ function TextInput({
 			onDelete(value.slice(0, -1));
 			return;
 		}
+
 		onChange(input);
 	});
 

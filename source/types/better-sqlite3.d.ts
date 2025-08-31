@@ -9,32 +9,32 @@ declare module 'better-sqlite3' {
 	};
 
 	type Statement = {
-		run(...params: any[]): Database;
-		get(...params: any[]): any;
-		all(...params: any[]): any[];
-		iterate(...params: any[]): IterableIterator<any>;
-		bind(...params: any[]): Statement;
+		run(...parameters: any[]): Database;
+		get(...parameters: any[]): any;
+		all(...parameters: any[]): any[];
+		iterate(...parameters: any[]): IterableIterator<any>;
+		bind(...parameters: any[]): Statement;
 		pluck(toggleState?: boolean): Statement;
 		expand(toggleState?: boolean): Statement;
 		raw(toggleState?: boolean): Statement;
 	};
 
 	type Transaction = {
-		(...params: any[]): any;
-		default(...params: any[]): any;
-		deferred(...params: any[]): any;
-		immediate(...params: any[]): any;
-		exclusive(...params: any[]): any;
+		(...parameters: any[]): any;
+		default(...parameters: any[]): any;
+		deferred(...parameters: any[]): any;
+		immediate(...parameters: any[]): any;
+		exclusive(...parameters: any[]): any;
 	};
 
 	class Database {
 		constructor(filename: string, options?: DatabaseOptions);
 
 		prepare(source: string): Statement;
-		transaction(fn: (...params: any[]) => any): Transaction;
+		transaction(fn: (...parameters: any[]) => any): Transaction;
 		exec(source: string): Database;
 		pragma(source: string, options?: {simple: boolean}): any;
-		function(name: string, cb: (...params: any[]) => any): Database;
+		function(name: string, cb: (...parameters: any[]) => any): Database;
 		loadExtension(path: string): void;
 		close(): void;
 	}
