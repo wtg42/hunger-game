@@ -4,3 +4,14 @@
 
 // 經濟狀況調查功能用的類型
 export type InsultsKey = 'empty' | 'coins' | 'savings' | 'stable' | 'rich';
+
+// 餐點選項類型定義
+export type MealOption = {
+	id: number;
+	name: string;
+	weight: number;
+	tags?: string;
+	description?: string;
+	metadata?: string;
+	created_at: string;
+};

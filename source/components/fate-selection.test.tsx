@@ -3,8 +3,8 @@ import React from 'react';
 import {render} from 'ink-testing-library';
 import FateSelection from './fate-selection.js';
 
-vi.mock('../db.js', () => ({
-	pickRestaurant: () => [
+vi.mock('../services/database.js', () => ({
+	pickMealsByStatus: () => [
 		{
 			id: 1,
 			name: '測試餐廳1',

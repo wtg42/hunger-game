@@ -1,18 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Box, Text, useInput, useApp} from 'ink';
 import Spinner from 'ink-spinner';
-import {pickRestaurant} from '../db.js'; // 你自己的 db 讀取
+import {pickMealsByStatus} from '../services/database.js';
 import type {InsultsKey} from '../types/index.js';
-
-type MealOption = {
-	id: number;
-	name: string;
-	weight: number;
-	tags?: string;
-	description?: string;
-	metadata?: string;
-	created_at: string;
-};
 
 type FateSelectionProps = {
 	// 用戶選擇的經濟狀況，例如 "empty", "coins", "savings" 這類
@@ -45,7 +35,7 @@ function FateSelection({
 		 * 定義一個 async 函式來處理非同步操作
 		 */
 		const fetchDataAndDelay = async () => {
-			const options = pickRestaurant() as MealOption[];
+			const options = pickMealsByStatus(walletStatus);
 			// 這邊可以加更細緻的經濟狀態過濾，例如空空的就挑 weight 最低的
 			const picked1 = options[0]; // 目前先拿第一個當挑選結果
 			setRestaurant1(picked1?.name ?? '沒有找到合適的餐廳...');

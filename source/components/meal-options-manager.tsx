@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import {Text, useInput} from 'ink';
-import App from '../app.js';
-import {addMealOption} from '../db.js';
+import {addMealOption} from '../services/database.js';
+import {useNavigation} from '../hooks/use-navigation.js';
 import SelectInput from './select-input.js';
 import Notification from './notification.js';
 import AddMealPage from './add-meal-page.js';
@@ -19,6 +19,8 @@ const mealOptions: Array<{label: string; value: string}> = [
  * 讓用戶用可以自行新增編輯餐點 DB 內容
  */
 function MealOptionsManager(): JSX.Element {
+	const {goBack} = useNavigation();
+
 	// 用戶選擇
 	const [userSelected, setUserSelected] = useState<string>('');
 
@@ -34,7 +36,7 @@ function MealOptionsManager(): JSX.Element {
 	useInput(
 		(input, key) => {
 			if (key.escape) {
-				setUserSelected('escape');
+				goBack();
 				return;
 			}
 
@@ -69,10 +71,6 @@ function MealOptionsManager(): JSX.Element {
 
 		case 'delete': {
 			return <Text color="yellowBright">Still working on it</Text>; // Return <div />;
-		}
-
-		case 'escape': {
-			return <App />;
 		}
 
 		case 'q': {

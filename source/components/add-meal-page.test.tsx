@@ -3,11 +3,6 @@ import {test, expect} from 'vitest';
 import {render} from 'ink-testing-library';
 import AddMealPage from './add-meal-page.js';
 
-// Mock components for testing
-function MockApp(): undefined {
-	return undefined;
-}
-
 // Mock addMeal function for testing
 const createMockAddMeal = () => {
 	const calls: unknown[][] = [];
@@ -23,9 +18,7 @@ const createMockAddMeal = () => {
 test('renders without crashing', () => {
 	const mockAddMeal = createMockAddMeal();
 
-	const {lastFrame} = render(
-		<AddMealPage addMeal={mockAddMeal} App={MockApp} />,
-	);
+	const {lastFrame} = render(<AddMealPage addMeal={mockAddMeal} />);
 
 	const frame = lastFrame();
 	expect(frame).toBeTruthy();
@@ -37,9 +30,7 @@ test('handles database errors gracefully', () => {
 		throw new Error('資料庫連線失敗');
 	};
 
-	const {lastFrame} = render(
-		<AddMealPage addMeal={mockAddMeal} App={MockApp} />,
-	);
+	const {lastFrame} = render(<AddMealPage addMeal={mockAddMeal} />);
 
 	const frame = lastFrame();
 	expect(frame).toBeTruthy();

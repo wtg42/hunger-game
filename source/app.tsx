@@ -1,47 +1,40 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {useApp, useInput} from 'ink';
 import Cover from './components/cover.js';
 import EconomicSurvey from './components/economic-survey.js';
 import MealOptionsManager from './components/meal-options-manager.js';
-
-type NextSetp = 'return' | 'm' | '';
+import {useNavigation} from './hooks/use-navigation.js';
 
 export default function App(): JSX.Element {
-	// 判斷用戶按下任意鍵轉換場景
-	const [nextStep, setNextStep] = useState<NextSetp>('');
-	const [restartKey, setRestartKey] = useState(0); // 用來強制重新渲染
-
+	const {currentRoute, navigate} = useNavigation();
 	const {exit} = useApp();
-
-	const handleRestart = () => {
-		setNextStep('');
-		setRestartKey(previous => previous + 1); // 強制重新渲染
-	};
 
 	useInput(
 		(input, key) => {
 			if (input === 'q') {
 				exit();
-			} else if (key.return) {
-				setNextStep('return');
-			} else if (input === 'm') {
-				// 進入餐廳編輯畫面
-				setNextStep('m');
+			} else if (key.return && currentRoute === 'cover') {
+				navigate('economic-survey');
+			} else if (input === 'm' && currentRoute === 'cover') {
+				navigate('meal-manager');
 			}
 		},
 		{
-			isActive: !nextStep,
+			isActive: currentRoute === 'cover',
 		},
 	);
 
-	if (nextStep === 'return') {
-		return <EconomicSurvey key={restartKey} onRestart={handleRestart} />;
-	}
+	switch (currentRoute) {
+		case 'economic-survey': {
+			return <EconomicSurvey />;
+		}
 
-	if (nextStep === 'm') {
-		// 進入餐廳編輯畫面
-		return <MealOptionsManager />;
-	}
+		case 'meal-manager': {
+			return <MealOptionsManager />;
+		}
 
-	return <Cover />;
+		default: {
+			return <Cover />;
+		}
+	}
 }

@@ -5,7 +5,7 @@ import {
 	validateMealName,
 	validateMealWeight,
 } from '../utils/validation.js';
-import App from '../app.js';
+import {useNavigation} from '../hooks/use-navigation.js';
 import TextInput from './text-input.js';
 import Notification from './notification.js';
 
@@ -31,13 +31,9 @@ type AddMeal = (option: {
 	metadata?: string;
 }) => unknown;
 
-function AddMealPage({
-	addMeal,
-	App: AppComponent,
-}: {
-	readonly addMeal: AddMeal;
-	readonly App?: React.ComponentType;
-}): JSX.Element {
+function AddMealPage({addMeal}: {readonly addMeal: AddMeal}): JSX.Element {
+	const {goBack} = useNavigation();
+
 	// 用戶當前輸入的內容
 	const [inputStatement, setInputStatement] = useState('');
 
@@ -172,7 +168,7 @@ function AddMealPage({
 	// 時間到自動切換到首頁
 	const [goHome, setGoHome] = useState(false);
 
-	// 最後在顯示一秒儲存成功訊息 回到首頁
+	// 最後在顯示一秒儲存成功訊息 回到上一頁
 	useEffect(() => {
 		if (!isSaved) {
 			return;
@@ -187,6 +183,13 @@ function AddMealPage({
 		};
 	}, [isSaved]);
 
+	// 返回上一頁
+	useEffect(() => {
+		if (goHome) {
+			goBack();
+		}
+	}, [goHome, goBack]);
+
 	/**
 	 * Update input statement
 	 */
@@ -200,11 +203,6 @@ function AddMealPage({
 	const handleOnDelete = (value: string) => {
 		setInputStatement(value);
 	};
-
-	if (goHome) {
-		const Component = AppComponent ?? App;
-		return <Component />;
-	}
 
 	if (isSaved) {
 		return (

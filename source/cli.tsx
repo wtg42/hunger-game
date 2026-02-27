@@ -2,7 +2,11 @@
 import React from 'react';
 import {render} from 'ink';
 // Import meow from 'meow';
+import {initDatabase} from './services/database.js';
 import App from './app.js';
+
+// Initialize database before rendering the app
+initDatabase();
 
 // Temporarily disabled - flags not used yet
 // const cli = meow(

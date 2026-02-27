@@ -64,11 +64,7 @@ function EconomicSurvey({onRestart}: EconomicSurveyProps): JSX.Element {
 	// 用戶選擇經濟狀況後的顯示的訊息
 	if (selectedMessage) {
 		return (
-			<FateSelection
-				comment={selectedMessage}
-				walletStatus={userWalletStatus}
-				onRestart={onRestart}
-			/>
+			<FateSelection walletStatus={userWalletStatus} onRestart={onRestart} />
 		);
 	}
 
