@@ -62,14 +62,14 @@
 
 - [x] 9.1 Verify all TypeScript compilation succeeds without errors
 - [x] 9.2 Run existing test suite and verify all tests pass
-- [ ] 9.3 Manually test: Cover page loads and displays correctly
-- [ ] 9.4 Manually test: Navigation from cover to economic survey works
-- [ ] 9.5 Manually test: Economic survey selection works
-- [ ] 9.6 Manually test: Meal selection displays economic-status-filtered meals
-- [ ] 9.7 Manually test: Can add new meals through meal manager
-- [ ] 9.8 Manually test: Restart functionality works from meal selection
-- [ ] 9.9 Manually test: Exit (Q key) works from all screens
-- [ ] 9.10 Verify error messages display correctly for duplicate names and invalid input
+- [x] 9.3 Manually test: Cover page loads and displays correctly
+- [x] 9.4 Manually test: Navigation from cover to economic survey works
+- [x] 9.5 Manually test: Economic survey selection works
+- [x] 9.6 Manually test: Meal selection displays economic-status-filtered meals
+- [x] 9.7 Manually test: Can add new meals through meal manager
+- [x] 9.8 Manually test: Restart functionality works from meal selection
+- [x] 9.9 Manually test: Exit (Q key) works from all screens
+- [x] 9.10 Verify error messages display correctly for duplicate names and invalid input
 
 ## 10. Code Cleanup
 
@@ -82,5 +82,5 @@
 
 - [x] 11.1 Verify no unused imports or dead code remains
 - [x] 11.2 Run full test suite one final time
-- [ ] 11.3 Verify application works end-to-end with all routes
-- [ ] 11.4 Create a git commit with the refactoring work
+- [x] 11.3 Verify application works end-to-end with all routes
+- [x] 11.4 Create a git commit with the refactoring work
