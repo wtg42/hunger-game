@@ -166,14 +166,51 @@ export function checkDuplicateMealName(name: string): boolean {
 /**
  * 根據經濟狀況篩選餐點
  *
- * 目前先返回隨機排序的餐點，後續可根據 walletStatus 參數優化篩選邏輯
+ * 根據 walletStatus 參數進行篩選和排序：
+ * - empty: 返回權重 1-2 的便宜選項（按權重降序）
+ * - coins/savings/stable: 返回權重 2-4 的中等選項（按權重降序）
+ * - rich: 返回權重 4-5 的高級選項（按權重降序）
+ * - 如果無符合條件的餐點，返回全部（按權重降序）
  */
-export function pickMealsByStatus(_walletStatus: string): MealOption[] {
+export function pickMealsByStatus(walletStatus: string): MealOption[] {
 	const database = getDb();
-
-	return database
-		.prepare(`SELECT * FROM meal_options ORDER BY RANDOM() * weight DESC`)
+	const allOptions = database
+		.prepare(`SELECT * FROM meal_options`)
 		.all() as MealOption[];
+
+	let filtered: MealOption[];
+
+	switch (walletStatus) {
+		case 'empty': {
+			filtered = allOptions.filter(m => m.weight >= 1 && m.weight <= 2);
+			break;
+		}
+
+		case 'rich': {
+			filtered = allOptions.filter(m => m.weight >= 4 && m.weight <= 5);
+			break;
+		}
+
+		case 'coins':
+		case 'savings':
+		case 'stable': {
+			filtered = allOptions.filter(m => m.weight >= 2 && m.weight <= 4);
+			break;
+		}
+
+		default: {
+			filtered = allOptions.filter(m => m.weight >= 2 && m.weight <= 4);
+			break;
+		}
+	}
+
+	// 如果無符合條件的餐點，返回全部
+	if (filtered.length === 0) {
+		filtered = allOptions;
+	}
+
+	// 按權重降序排序
+	return filtered.sort((a, b) => b.weight - a.weight);
 }
 
 /**

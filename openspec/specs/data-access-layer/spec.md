@@ -34,6 +34,13 @@ The system SHALL provide a set of well-named, pure functions in `src/services/da
 - **WHEN** a component calls `addMealOption({ name, weight, tags, description })`
 - **THEN** the meal is inserted into the database with proper validation and error handling
 
+#### Scenario: Update meal option through DAL
+
+- **WHEN** a component calls `updateMealOption(id, { name?, weight?, tags?, description? })`
+- **THEN** the specified fields of the meal are updated in the database
+- **AND** validation is performed on updated fields (weight 1-5, name uniqueness, text length limits)
+- **AND** errors are thrown with user-friendly messages on validation failure
+
 #### Scenario: Delete meal option through DAL
 
 - **WHEN** a component calls `deleteMealOption(id)`
