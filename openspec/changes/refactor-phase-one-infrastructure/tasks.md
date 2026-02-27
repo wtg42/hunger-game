@@ -18,7 +18,7 @@
 - [x] 3.4 Implement `deleteMealOption()` function
 - [x] 3.5 Implement `checkDuplicateMealName()` function
 - [x] 3.6 Implement `pickMealsByStatus(walletStatus)` function with economic status filtering
-- [ ] 3.7 Remove module-level database initialization from old code
+- [x] 3.7 Remove module-level database initialization from old code
 - [x] 3.8 Ensure all database operations are properly error-handled with Chinese error messages
 
 ## 4. Implement Navigation System
